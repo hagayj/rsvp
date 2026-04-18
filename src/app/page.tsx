@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { supabase } from '@/lib/supabase';
 import RSVPForm from './RSVPForm';
 

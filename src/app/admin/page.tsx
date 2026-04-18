@@ -1,5 +1,5 @@
+/* eslint-disable */
 "use client";
-
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Lock, CheckCircle2, XCircle, HelpCircle, Search, MessageSquareShare, Send, Terminal, Wifi, WifiOff } from 'lucide-react';

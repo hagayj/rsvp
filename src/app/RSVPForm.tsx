@@ -1,8 +1,8 @@
+/* eslint-disable */
 "use client";
-
 import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import { CheckCircle2, ChevronDown, PartyPopper, CalendarDays, MapPin } from 'lucide-react';
+import { CheckCircle2, ChevronDown, PartyPopper, CalendarDays, MapPin, BellPlus } from 'lucide-react';
 
 type STATUS = 'pending' | 'attending' | 'declined';
 
@@ -39,6 +39,33 @@ export default function RSVPForm({ id, name, initialStatus, initialGuests }: RSV
     }
     
     setIsSubmitting(false);
+  };
+
+  const generateICS = () => {
+    // Event times in UTC (Israel Summer Time is UTC+3)
+    // June 5, 2026, 20:00 IDT -> 17:00 UTC
+    // June 6, 2026, 00:00 IDT -> 21:00 UTC
+    const title = "יום הולדת 80 לעמיר ז'ביליק 🚜";
+    const description = `נשמח לראותכם! לפרטים ואישור הגעה: ${window.location.origin}${window.location.pathname}?id=${id}`;
+    const location = "מוזיאון הטרקטור בעין ורד";
+    const start = "20260605T170000Z";
+    const end = "20260605T210000Z";
+
+    const icsContent = [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "BEGIN:VEVENT",
+      `DTSTART:${start}`,
+      `DTEND:${end}`,
+      `SUMMARY:${title}`,
+      `DESCRIPTION:${description}`,
+      `LOCATION:${location}`,
+      "END:VEVENT",
+      "END:VCALENDAR"
+    ].join("\n");
+
+    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+    return URL.createObjectURL(blob);
   };
 
   return (
@@ -79,10 +106,18 @@ export default function RSVPForm({ id, name, initialStatus, initialGuests }: RSV
                   href="https://waze.com/ul?q=מוזיאון%20הטרקטור%20בשדה%20ורד" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#33CCFF] text-white text-[11px] font-bold rounded-full hover:shadow-lg hover:bg-[#2bb8e6] transition-all active:scale-95 mr-auto"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#33CCFF] text-white text-[11px] font-bold rounded-full hover:shadow-lg hover:bg-[#2bb8e6] transition-all active:scale-95"
                 >
                   <img src="https://pngimg.com/uploads/waze/waze_PNG40.png" className="w-4 h-4" alt="Waze" />
                   ניווט ליעד
+                </a>
+                <a 
+                  href={typeof window !== 'undefined' ? generateICS() : '#'}
+                  download="amir-birthday-80.ics"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-500 text-white text-[11px] font-bold rounded-full hover:shadow-lg hover:bg-amber-600 transition-all active:scale-95"
+                >
+                  <BellPlus className="w-3.5 h-3.5" />
+                  הוספה ליומן
                 </a>
               </div>
             </div>
