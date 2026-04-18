@@ -63,12 +63,9 @@ export default function RSVPForm({ id, name, initialStatus, initialGuests }: RSV
             <div className="bg-green-100 p-2.5 rounded-xl text-green-700">
               <CalendarDays className="w-6 h-6" />
             </div>
-            <div className="text-right">
-              <p className="font-bold text-lg">יום ו', 5 ביוני 2026</p>
-              <div className="text-sm text-slate-500 font-medium leading-relaxed mt-1">
-                <p>התכנסות החל מהשעה 20:00</p>
-                <p className="text-purple-600 font-bold">תחילת מסיבה בשעה 21:00</p>
-              </div>
+            <div className="text-right flex-1 pt-0.5">
+              <p className="font-bold text-lg leading-tight">יום ו', 5 ביוני 2026</p>
+              <p className="text-sm text-slate-500 font-medium mt-1">התכנסות החל מהשעה 20:00</p>
             </div>
           </div>
           <div className="flex items-start gap-3">
@@ -79,6 +76,10 @@ export default function RSVPForm({ id, name, initialStatus, initialGuests }: RSV
               <p className="font-bold text-lg leading-tight">מוזיאון הטרקטור במושב עין ורד</p>
               <p className="text-xs text-slate-500 font-medium italic mt-1">הזמנה אישית/זוגית ולא ניתנת להעברה</p>
             </div>
+          </div>
+
+          <div className="text-center py-2 border-y border-slate-100/50">
+            <p className="text-purple-600 font-extrabold text-xl animate-pulse">תחילת מסיבה בשעה 21:00</p>
           </div>
 
           <div className="flex flex-col gap-3 mt-2">
