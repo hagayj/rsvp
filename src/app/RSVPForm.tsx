@@ -70,7 +70,7 @@ export default function RSVPForm({ id, name, initialStatus, initialGuests }: RSV
           </div>
 
           <div className="text-center py-1">
-            <p className="text-purple-600 font-extrabold text-lg">תחילת מסיבה בשעה 21:00</p>
+            <p className="text-purple-600 font-extrabold text-sm">תחילת מסיבה בשעה 21:00</p>
           </div>
 
           <div className="flex items-start gap-3">
