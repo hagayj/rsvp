@@ -41,30 +41,6 @@ export default function RSVPForm({ id, name, initialStatus, initialGuests }: RSV
     setIsSubmitting(false);
   };
 
-  const generateICS = () => {
-    const title = "יום הולדת 80 לעמיר ז'ביליק 🚜";
-    const description = `נשמח לראותכם! לפרטים ואישור הגעה: ${window.location.origin}${window.location.pathname}?id=${id}`;
-    const location = "מוזיאון הטרקטור בעין ורד";
-    const start = "20260605T170000Z";
-    const end = "20260605T210000Z";
-
-    const icsContent = [
-      "BEGIN:VCALENDAR",
-      "VERSION:2.0",
-      "BEGIN:VEVENT",
-      `DTSTART:${start}`,
-      `DTEND:${end}`,
-      `SUMMARY:${title}`,
-      `DESCRIPTION:${description}`,
-      `LOCATION:${location}`,
-      "END:VEVENT",
-      "END:VCALENDAR"
-    ].join("\r\n");
-
-    if (typeof window === 'undefined') return '#';
-    const base64 = btoa(unescape(encodeURIComponent(icsContent)));
-    return `data:text/calendar;base64,${base64}`;
-  };
 
   return (
     <div className="w-full max-w-md mx-auto relative z-10" dir="rtl">
@@ -101,23 +77,33 @@ export default function RSVPForm({ id, name, initialStatus, initialGuests }: RSV
             </div>
             <div className="text-right flex-1">
               <p className="font-bold text-lg">מוזיאון הטרקטור במושב עין ורד</p>
-              <div className="flex flex-wrap justify-center gap-3 mt-4">
+              <div className="flex flex-wrap justify-center gap-2 mt-4">
                 <a 
                   href="https://waze.com/ul?q=מוזיאון%20הטרקטור%20בשדה%20ורד" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-[#33CCFF] text-white text-xs font-bold rounded-full hover:shadow-lg transition-all active:scale-95"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#33CCFF] text-white text-[10px] font-bold rounded-full hover:shadow-lg transition-all active:scale-95"
                 >
-                  <img src="https://pngimg.com/uploads/waze/waze_PNG40.png" className="w-5 h-5 order-first" alt="Waze" />
-                  <span>ניווט ליעד</span>
+                  <img src="https://pngimg.com/uploads/waze/waze_PNG40.png" className="w-4 h-4 order-first" alt="Waze" />
+                  <span>ניווט בוויז</span>
                 </a>
+                
                 <a 
-                  href={generateICS()}
-                  download="amir-birthday-80.ics"
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white text-xs font-bold rounded-full hover:shadow-lg transition-all active:scale-95"
+                  href={`https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent("יום הולדת 80 לעמיר ז'ביליק 🚜")}&details=${encodeURIComponent(`נשמח לראותכם! לפרטים ואישור הגעה: ${typeof window !== 'undefined' ? window.location.origin : ''}/?id=${id}`)}&location=${encodeURIComponent("מוזיאון הטרקטור בעין ורד")}&dates=20260605T170000Z/20260605T210000Z`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#4285F4] text-white text-[10px] font-bold rounded-full hover:shadow-lg transition-all active:scale-95"
+                >
+                  <img src="https://www.gstatic.com/images/branding/product/1x/calendar_2020q4_48dp.png" className="w-4 h-4 order-first" alt="Google Calendar" />
+                  <span>יומן Google</span>
+                </a>
+
+                <a 
+                  href={`/api/calendar?id=${id}`}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-600 text-white text-[10px] font-bold rounded-full hover:shadow-lg transition-all active:scale-95"
                 >
                   <BellPlus className="w-4 h-4 order-first" />
-                  <span>הוספה ליומן</span>
+                  <span>יומן Apple/אחר</span>
                 </a>
               </div>
             </div>
