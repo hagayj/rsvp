@@ -91,7 +91,10 @@ export default function RSVPForm({ id, name, initialStatus, initialGuests }: RSV
             </div>
             <div className="text-right">
               <p className="font-bold text-lg">יום ו', 5 ביוני 2026</p>
-              <p className="text-sm text-slate-500 font-medium">התכנסות ב-20:00 | תחילת מסיבה ב-21:00</p>
+              <div className="text-sm text-slate-500 font-medium leading-tight mt-1">
+                <p>התכנסות החל מהשעה 20:00</p>
+                <p>תחילת מסיבה בשעה 21:00</p>
+              </div>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -108,16 +111,16 @@ export default function RSVPForm({ id, name, initialStatus, initialGuests }: RSV
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#33CCFF] text-white text-[11px] font-bold rounded-full hover:shadow-lg hover:bg-[#2bb8e6] transition-all active:scale-95"
                 >
-                  <img src="https://pngimg.com/uploads/waze/waze_PNG40.png" className="w-4 h-4" alt="Waze" />
                   ניווט ליעד
+                  <img src="https://pngimg.com/uploads/waze/waze_PNG40.png" className="w-4 h-4" alt="Waze" />
                 </a>
                 <a 
                   href={typeof window !== 'undefined' ? generateICS() : '#'}
                   download="amir-birthday-80.ics"
-                  className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-500 text-white text-[11px] font-bold rounded-full hover:shadow-lg hover:bg-amber-600 transition-all active:scale-95"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 bg-green-600 text-white text-[11px] font-bold rounded-full hover:shadow-lg hover:bg-green-700 transition-all active:scale-95"
                 >
-                  <BellPlus className="w-3.5 h-3.5" />
                   הוספה ליומן
+                  <BellPlus className="w-3.5 h-3.5" />
                 </a>
               </div>
             </div>
