@@ -68,6 +68,11 @@ export default function RSVPForm({ id, name, initialStatus, initialGuests }: RSV
               <p className="text-sm text-slate-500 font-medium mt-1">התכנסות החל מהשעה 20:00</p>
             </div>
           </div>
+
+          <div className="text-center py-1">
+            <p className="text-purple-600 font-extrabold text-lg">תחילת מסיבה בשעה 21:00</p>
+          </div>
+
           <div className="flex items-start gap-3">
              <div className="bg-amber-100 p-2.5 rounded-xl text-amber-700">
               <MapPin className="w-6 h-6" />
@@ -76,10 +81,6 @@ export default function RSVPForm({ id, name, initialStatus, initialGuests }: RSV
               <p className="font-bold text-lg leading-tight">מוזיאון הטרקטור במושב עין ורד</p>
               <p className="text-xs text-slate-500 font-medium italic mt-1">הזמנה אישית/זוגית ולא ניתנת להעברה</p>
             </div>
-          </div>
-
-          <div className="text-center py-2 border-y border-slate-100/50">
-            <p className="text-purple-600 font-extrabold text-xl animate-pulse">תחילת מסיבה בשעה 21:00</p>
           </div>
 
           <div className="flex flex-col gap-3 mt-2">
