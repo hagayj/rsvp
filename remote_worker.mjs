@@ -84,11 +84,11 @@ async function processBulkSend(job) {
     for (const guest of guests) {
       let message;
       if (targetStatus === 'attending') {
-        message = `היי 👋 כיף שאתם מגיעים! רצינו להזכיר – האירוע מתקרב!\n📍 מוזיאון הטרקטור, עין ורד\n🔗 לפרטים ולניווט: https://rsvp-app-sage.vercel.app?id=${guest.unique_code}`;
+        message = `היי, כיף שאתם מגיעים! רצינו להזכיר – האירוע מתקרב!\nמוזיאון הטרקטור, עין ורד\nלפרטים ולניווט: https://rsvp-app-sage.vercel.app?id=${guest.unique_code}`;
       } else if (targetStatus === 'declined') {
-        message = `היי 👋 לא נוכל בלעדיכם! 😊 אם שינית דעתך ותרצה להגיע, הקישור שלך:\nhttps://rsvp-app-sage.vercel.app?id=${guest.unique_code}`;
+        message = `היי, לא נוכל בלעדיכם! אם שינית דעתך ותרצה להגיע, הקישור שלך:\nhttps://rsvp-app-sage.vercel.app?id=${guest.unique_code}`;
       } else {
-        message = `היי 👋 רצינו לוודא שראית את ההזמנה ושתבואו לחגוג איתנו! אפשר לאשר הגעה בקישור האישי שלך כאן:\nhttps://rsvp-app-sage.vercel.app?id=${guest.unique_code}`;
+        message = `היי, נשמח מאוד לראותכם בחגיגת יום ההולדת ה-80 של עמיר! אפשר לראות את ההזמנה ולאשר הגעה בקישור האישי כאן:\nhttps://rsvp-app-sage.vercel.app?id=${guest.unique_code}`;
       }
 
       const phone = guest.phone.replace(/[^0-9]/g, '');

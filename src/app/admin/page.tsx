@@ -149,7 +149,7 @@ export default function AdminPage() {
   }, [isAuthenticated, fetchGuests, checkWorkerStatus, fetchLogs]);
 
   const handleSendReminder = async (guest: Guest) => {
-    const message = `היי 👋 נשמח מאוד לראותכם בחגיגת יום ההולדת ה-80 של עמיר! 🎉 אפשר לראות את ההזמנה ולאשר הגעה בקישור האישי כאן:\nhttps://rsvp-app-sage.vercel.app?id=${guest.unique_code}`;
+    const message = `היי, נשמח מאוד לראותכם בחגיגת יום ההולדת ה-80 של עמיר! אפשר לראות את ההזמנה ולאשר הגעה בקישור האישי כאן:\nhttps://rsvp-app-sage.vercel.app?id=${guest.unique_code}`;
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/${guest.phone.replace('+', '')}?text=${encodedMessage}`;
     
