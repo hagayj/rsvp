@@ -100,14 +100,23 @@ async def insert_to_supabase(contacts):
             'phone':       phone,
             'status':      'pending',
             'unique_code': make_code(c['name'], phone),
+            'added_by':    c.get('sender', 'Telegram Import'),
+            'is_approved': False
         }).execute()
 
         print(f"  [INSERT] {c['name']:<30} {phone}  → added ✅")
         inserted += 1
 
     print(f"\n{'='*60}")
-    print(f"SUMMARY: {inserted} inserted, {skipped} skipped (duplicate phone)")
+    summary = f"סנכרון טלגרם הושלם: {inserted} נוספו, {skipped} דולגו (כבר קיימים)."
+    print(summary)
     print(f"{'='*60}")
+    
+    if sb:
+        sb.table('system_logs').insert({
+            'message': summary,
+            'level': 'success'
+        }).execute()
 
 # ─── Main ─────────────────────────────────────────────────────────────────────
 async def main():

@@ -3,6 +3,9 @@ const { Client, LocalAuth } = pkg;
 import qrcode from 'qrcode-terminal';
 import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
+import { exec } from 'child_process';
+import { promisify } from 'util';
+const execAsync = promisify(exec);
 
 dotenv.config({ path: '.env.local' });
 
@@ -126,6 +129,28 @@ async function processBulkSend(job) {
   }
 }
 
+// ─── Process a telegram_sync job ──────────────────────────────────────────────
+async function processTelegramSync(job) {
+  await log(`🔄 מתחיל סנכרון מטלגרם...`, 'info');
+  await supabase.from('jobs').update({ status: 'processing' }).eq('id', job.id);
+
+  try {
+    // Run the script. Assumes python3 is in PATH and venv is not needed or handled globally
+    const { stdout, stderr } = await execAsync('python3 telegram_import.py --insert');
+    
+    if (stderr) {
+       await log(`⚠️ התראת מערכת בסנכרון: ${stderr}`, 'info');
+    }
+    
+    await log(`✅ סנכרון טלגרם הסתיים בהצלחה!`, 'success');
+    await supabase.from('jobs').update({ status: 'completed' }).eq('id', job.id);
+    
+  } catch (error) {
+    await log(`❌ שגיאה בסנכרון טלגרם: ${error.message}`, 'error');
+    await supabase.from('jobs').update({ status: 'failed' }).eq('id', job.id);
+  }
+}
+
 // ─── Realtime Job Listener ─────────────────────────────────────────────────────
 supabase
   .channel('jobs-listener')
@@ -138,8 +163,12 @@ supabase
     },
     async (payload) => {
       const job = payload.new;
-      if (job.status === 'pending' && job.type === 'bulk_send') {
-        await processBulkSend(job);
+      if (job.status === 'pending') {
+        if (job.type === 'bulk_send') {
+          await processBulkSend(job);
+        } else if (job.type === 'telegram_sync') {
+          await processTelegramSync(job);
+        }
       }
     }
   )
@@ -163,7 +192,11 @@ setInterval(async () => {
   if (pendingJobs && pendingJobs.length > 0) {
     console.log(`🔍 נמצאו ${pendingJobs.length} פקודות שלא טופלו, מעבד...`);
     for (const job of pendingJobs) {
-      await processBulkSend(job);
+      if (job.type === 'bulk_send') {
+        await processBulkSend(job);
+      } else if (job.type === 'telegram_sync') {
+        await processTelegramSync(job);
+      }
     }
   }
 }, 60000);

@@ -13,6 +13,8 @@ interface Guest {
   unique_code: string;
   updated_at: string;
   last_reminder_at: string | null;
+  added_by: string;
+  is_approved: boolean;
 }
 
 interface LogEntry {
@@ -33,6 +35,9 @@ export default function AdminPage() {
   const [workerOnline, setWorkerOnline] = useState<boolean | null>(null);
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [showLogs, setShowLogs] = useState(false);
+  const [showManualAdd, setShowManualAdd] = useState(false);
+  const [manualName, setManualName] = useState('');
+  const [manualPhone, setManualPhone] = useState('');
   const logsEndRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to bottom of logs
@@ -126,12 +131,9 @@ export default function AdminPage() {
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'jobs' },
         (payload) => {
           const job = payload.new as { status: string };
-          if (job.status === 'completed') {
-            setIsTriggering(false);
-            setJobStatus(null);
             fetchGuests();
           } else if (job.status === 'processing') {
-            setJobStatus('המחשב בבית שולח הודעות...');
+            setJobStatus(job.type === 'telegram_sync' ? 'מסנכרן מול טלגרם...' : 'המחשב בבית שולח הודעות...');
           } else if (job.status === 'failed') {
             setIsTriggering(false);
             setJobStatus('שגיאה! בדוק את הלוגים');
@@ -184,11 +186,74 @@ export default function AdminPage() {
     }
   };
 
+  const handleTriggerTelegramSync = async () => {
+    if (!workerOnline) {
+      alert('המחשב בבית אינו מחובר! ודא שהסקריפט remote_worker.mjs רץ שם.');
+      return;
+    }
+    
+    setIsTriggering(true);
+    setJobStatus('שולח פקודת סנכרון למחשב בבית...');
+    setShowLogs(true);
+
+    const { error } = await supabase
+      .from('jobs')
+      .insert([{ type: 'telegram_sync', status: 'pending', payload: {} }]);
+
+    if (error) {
+      alert('שגיאה בשליחת פקודת הסנכרון: ' + error.message);
+      setIsTriggering(false);
+      setJobStatus(null);
+    }
+  };
+
+  const handleDeleteGuest = async (id: string) => {
+    if (!confirm('האם אתה בטוח שברצונך למחוק את האורח?')) return;
+    const { error } = await supabase.from('guests').delete().eq('id', id);
+    if (!error) fetchGuests();
+  };
+
+  const handleApproveGuest = async (id: string) => {
+    const { error } = await supabase.from('guests').update({ is_approved: true }).eq('id', id);
+    if (!error) fetchGuests();
+  };
+
+  const handleAddManualGuest = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!manualName || !manualPhone) return;
+
+    // Normalize phone
+    let phone = manualPhone.replace(/[^0-9]/g, '');
+    if (phone.startsWith('0')) phone = '+972' + phone.slice(1);
+    else if (!phone.startsWith('+')) phone = '+' + phone;
+
+    const unique_code = `${manualName.slice(0, 5).toLowerCase()}-${Math.random().toString(36).substring(7)}`;
+
+    const { error } = await supabase.from('guests').insert([{
+      name: manualName,
+      phone: phone,
+      added_by: 'מנהל (ידני)',
+      is_approved: true,
+      status: 'pending',
+      unique_code
+    }]);
+
+    if (!error) {
+      setManualName('');
+      setManualPhone('');
+      setShowManualAdd(false);
+      fetchGuests();
+    } else {
+      alert('שגיאה בהוספת אורח: ' + error.message);
+    }
+  };
+
   const totalAttendingGuests = guests.filter(g => g.status === 'attending').reduce((sum, g) => sum + (g.guests_count || 1), 0);
   const totalAttendingInvites = guests.filter(g => g.status === 'attending').length;
   const totalDeclined = guests.filter(g => g.status === 'declined').length;
   const totalPending = guests.filter(g => g.status === 'pending').length;
-  const filteredGuests = filter === 'all' ? guests : guests.filter(g => g.status === filter);
+  const filteredGuests = (filter === 'all' ? guests : guests.filter(g => g.status === filter))
+    .sort((a, b) => b.is_approved === a.is_approved ? 0 : a.is_approved ? 1 : -1);
 
   const getLogColor = (level: string) => {
     if (level === 'success') return 'text-green-400';
@@ -233,8 +298,29 @@ export default function AdminPage() {
         
         {/* Header Stats */}
         <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
-          <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-            <h1 className="text-3xl font-bold text-slate-800">פאנל ניהול מוזמנים</h1>
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={handleTriggerTelegramSync}
+                disabled={isTriggering || !workerOnline}
+                className={`flex items-center gap-2 px-4 py-3 rounded-2xl font-bold transition shadow-md active:scale-95 ${
+                  isTriggering ? 'bg-slate-200 text-slate-500' : 'bg-blue-600 hover:bg-blue-700 text-white'
+                }`}
+              >
+                <div className={isTriggering ? 'animate-spin' : ''}>
+                  <Terminal className="w-5 h-5" />
+                </div>
+                סנכרן מטלגרם
+              </button>
+
+              <button 
+                onClick={() => setShowManualAdd(true)}
+                className="flex items-center gap-2 px-4 py-3 bg-green-600 hover:bg-green-700 text-white rounded-2xl font-bold transition shadow-md active:scale-95"
+              >
+                <CheckCircle2 className="w-5 h-5" />
+                הוספה ידנית
+              </button>
+            </div>
+
             <div className="flex items-center gap-3">
               {/* Worker Status Indicator */}
               <div className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-sm font-semibold ${
@@ -250,14 +336,63 @@ export default function AdminPage() {
               </div>
 
               <button onClick={() => setShowLogs(!showLogs)} className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-sm font-semibold transition ${showLogs ? 'bg-slate-800 text-white border-slate-800' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'}`}>
-                <Terminal className="w-4 h-4" /> לוגים חיים
+                <Terminal className="w-4 h-4" /> לוגים
               </button>
 
               <button onClick={fetchGuests} className="text-purple-600 font-semibold hover:bg-purple-50 px-4 py-2 rounded-lg flex items-center gap-2 transition border border-purple-100">
-                <Search className="w-4 h-4" /> רענן נתונים
+                <Search className="w-4 h-4" /> רענן
               </button>
             </div>
           </div>
+          
+          {/* Manual Add Modal Overlay */}
+          {showManualAdd && (
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+              <div className="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-sm border border-slate-200 animate-in fade-in zoom-in duration-200">
+                <h2 className="text-2xl font-bold text-slate-800 mb-2">הוספת אורח ידנית</h2>
+                <p className="text-slate-500 text-sm mb-6">הכנס את פרטי האורח להוספה מיידית למסד הנתונים</p>
+                <form onSubmit={handleAddManualGuest} className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-400 mb-1 mr-1">שם האורח</label>
+                    <input
+                      required
+                      type="text"
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-purple-500 outline-none"
+                      value={manualName}
+                      onChange={(e) => setManualName(e.target.value)}
+                      placeholder="לדוגמא: ישראל ישראלי"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-400 mb-1 mr-1">מספר טלפון</label>
+                    <input
+                      required
+                      type="tel"
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-purple-500 outline-none"
+                      value={manualPhone}
+                      onChange={(e) => setManualPhone(e.target.value)}
+                      placeholder="050-0000000"
+                    />
+                  </div>
+                  <div className="flex gap-3 pt-2">
+                    <button
+                      type="submit"
+                      className="flex-1 py-3 bg-purple-600 text-white font-bold rounded-xl active:scale-95 transition hover:bg-purple-700"
+                    >
+                      הוסף אורח
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowManualAdd(false)}
+                      className="px-6 py-3 bg-slate-100 text-slate-600 font-bold rounded-xl active:scale-95 transition hover:bg-slate-200"
+                    >
+                      ביטול
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="bg-purple-50 p-4 rounded-2xl border border-purple-100">
@@ -365,10 +500,10 @@ export default function AdminPage() {
                 <tr>
                   <th className="p-4">שם אורח</th>
                   <th className="p-4">טלפון</th>
+                  <th className="p-4">הוסיף על ידי</th>
                   <th className="p-4 text-center">כמות</th>
-                  <th className="p-4">תאריך שליחה</th>
-                  <th className="p-4">תשובה אחרונה</th>
                   <th className="p-4">סטטוס</th>
+                  <th className="p-4 text-center">אישור</th>
                   <th className="p-4">פעולות</th>
                 </tr>
               </thead>
@@ -378,36 +513,51 @@ export default function AdminPage() {
                 ) : filteredGuests.length === 0 ? (
                   <tr><td colSpan={7} className="p-8 text-center text-slate-400">אין אורחים שתואמים לסינון.</td></tr>
                 ) : (
-                  filteredGuests.map(guest => (
-                    <tr key={guest.id} className="hover:bg-slate-50/50 transition">
-                      <td className="p-4 font-bold text-slate-800">{guest.name}</td>
+                    <tr key={guest.id} className={`hover:bg-slate-50/50 transition ${!guest.is_approved ? 'bg-amber-50/50' : ''}`}>
+                      <td className="p-4">
+                        <div className="font-bold text-slate-800">{guest.name}</div>
+                        {!guest.is_approved && <span className="text-[10px] bg-amber-500 text-white px-1.5 py-0.5 rounded font-bold">ממתין לאישור</span>}
+                      </td>
                       <td className="p-4 text-slate-600 font-mono text-right" style={{direction: 'ltr'}}>{guest.phone}</td>
+                      <td className="p-4 text-slate-500 text-sm font-medium">{guest.added_by || 'מערכת'}</td>
+                      
                       <td className="p-4 text-center font-bold text-slate-800">{guest.status === 'attending' ? guest.guests_count : '-'}</td>
                       
-                      <td className="p-4 text-slate-500 text-xs">
-                        {guest.last_reminder_at ? new Date(guest.last_reminder_at).toLocaleString('he-IL', { dateStyle: 'short', timeStyle: 'short' }) : '-'}
-                      </td>
-
-                      <td className="p-4 text-slate-500 text-xs">
-                        {guest.status !== 'pending'
-                          ? new Date(guest.updated_at).toLocaleString('he-IL', { dateStyle: 'short', timeStyle: 'short' })
-                          : '-'}
-                      </td>
-
                       <td className="p-4">
                         {guest.status === 'attending' && <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-100 text-green-700 font-bold text-xs"><CheckCircle2 className="w-3 h-3"/> אישר</span>}
                         {guest.status === 'declined' && <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-100 text-red-700 font-bold text-xs"><XCircle className="w-3 h-3"/> סירב</span>}
                         {guest.status === 'pending' && <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-700 font-bold text-xs"><HelpCircle className="w-3 h-3"/> טרם ענה</span>}
                       </td>
 
+                      <td className="p-4 text-center">
+                        {!guest.is_approved ? (
+                          <button 
+                            onClick={() => handleApproveGuest(guest.id)}
+                            className="p-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition"
+                            title="אשר אורח"
+                          >
+                            <CheckCircle2 className="w-5 h-5" />
+                          </button>
+                        ) : (
+                          <div className="text-green-500 flex justify-center"><CheckCircle2 className="w-5 h-5" /></div>
+                        )}
+                      </td>
+
                       <td className="p-4">
-                        <button 
-                          onClick={() => handleSendReminder(guest)}
-                          className="inline-flex items-center gap-2 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-xl font-bold text-xs transition shadow-sm active:scale-95"
-                        >
-                          <MessageSquareShare className="w-4 h-4" />
-                          שלח
-                        </button>
+                        <div className="flex items-center gap-2">
+                          <button 
+                            onClick={() => handleSendReminder(guest)}
+                            className="inline-flex items-center gap-2 px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white rounded-lg font-bold text-xs transition shadow-sm active:scale-95"
+                          >
+                            <Send className="w-4 h-4" />
+                          </button>
+                          <button 
+                            onClick={() => handleDeleteGuest(guest.id)}
+                            className="inline-flex items-center gap-2 px-3 py-1.5 bg-red-100 hover:bg-red-200 text-red-600 rounded-lg font-bold text-xs transition shadow-sm active:scale-95"
+                          >
+                            <XCircle className="w-4 h-4" />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))
