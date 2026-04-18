@@ -299,9 +299,11 @@ export default function AdminPage() {
     <div className="min-h-screen bg-slate-50 p-4 md:p-8" dir="rtl">
       <div className="max-w-7xl mx-auto space-y-6">
         
-        {/* Header Stats */}
+        {/* Header Actions & Status */}
         <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
-            <div className="flex items-center gap-3">
+          <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+            <h1 className="text-3xl font-bold text-slate-800">פאנל ניהול מוזמנים</h1>
+            <div className="flex flex-wrap items-center gap-3">
               <button 
                 onClick={handleTriggerTelegramSync}
                 disabled={isTriggering || !workerOnline}
@@ -323,9 +325,10 @@ export default function AdminPage() {
                 הוספה ידנית
               </button>
             </div>
+          </div>
 
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-3">
-              {/* Worker Status Indicator */}
               <div className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-sm font-semibold ${
                 workerOnline === true ? 'bg-green-50 border-green-200 text-green-700' :
                 workerOnline === false ? 'bg-red-50 border-red-200 text-red-700' :
@@ -347,73 +350,63 @@ export default function AdminPage() {
               </button>
             </div>
           </div>
-          
-          {/* Manual Add Modal Overlay */}
-          {showManualAdd && (
-            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-              <div className="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-sm border border-slate-200 animate-in fade-in zoom-in duration-200">
-                <h2 className="text-2xl font-bold text-slate-800 mb-2">הוספת אורח ידנית</h2>
-                <p className="text-slate-500 text-sm mb-6">הכנס את פרטי האורח להוספה מיידית למסד הנתונים</p>
-                <form onSubmit={handleAddManualGuest} className="space-y-4">
-                  <div>
-                    <label className="block text-xs font-bold text-slate-400 mb-1 mr-1">שם האורח</label>
-                    <input
-                      required
-                      type="text"
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-purple-500 outline-none"
-                      value={manualName}
-                      onChange={(e) => setManualName(e.target.value)}
-                      placeholder="לדוגמא: ישראל ישראלי"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-slate-400 mb-1 mr-1">מספר טלפון</label>
-                    <input
-                      required
-                      type="tel"
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-purple-500 outline-none"
-                      value={manualPhone}
-                      onChange={(e) => setManualPhone(e.target.value)}
-                      placeholder="050-0000000"
-                    />
-                  </div>
-                  <div className="flex gap-3 pt-2">
-                    <button
-                      type="submit"
-                      className="flex-1 py-3 bg-purple-600 text-white font-bold rounded-xl active:scale-95 transition hover:bg-purple-700"
-                    >
-                      הוסף אורח
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setShowManualAdd(false)}
-                      className="px-6 py-3 bg-slate-100 text-slate-600 font-bold rounded-xl active:scale-95 transition hover:bg-slate-200"
-                    >
-                      ביטול
-                    </button>
-                  </div>
-                </form>
-              </div>
+        </div>
+
+        {/* Manual Add Modal Overlay */}
+        {showManualAdd && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-sm border border-slate-200 animate-in fade-in zoom-in duration-200">
+              <h2 className="text-2xl font-bold text-slate-800 mb-2">הוספת אורח ידנית</h2>
+              <p className="text-slate-500 text-sm mb-6">הכנס את פרטי האורח להוספה מיידית</p>
+              <form onSubmit={handleAddManualGuest} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-400 mb-1 mr-1">שם האורח</label>
+                  <input
+                    required
+                    type="text"
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-purple-500"
+                    value={manualName}
+                    onChange={(e) => setManualName(e.target.value)}
+                    placeholder="לדוגמא: ישראל ישראלי"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-400 mb-1 mr-1">מספר טלפון</label>
+                  <input
+                    required
+                    type="tel"
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-purple-500"
+                    value={manualPhone}
+                    onChange={(e) => setManualPhone(e.target.value)}
+                    placeholder="050-0000000"
+                  />
+                </div>
+                <div className="flex gap-3 pt-2">
+                  <button type="submit" className="flex-1 py-3 bg-purple-600 text-white font-bold rounded-xl active:scale-95 transition hover:bg-purple-700">הוסף אורח</button>
+                  <button type="button" onClick={() => setShowManualAdd(false)} className="px-6 py-3 bg-slate-100 text-slate-600 font-bold rounded-xl active:scale-95 transition hover:bg-slate-200">ביטול</button>
+                </div>
+              </form>
             </div>
-          )}
-          
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-purple-50 p-4 rounded-2xl border border-purple-100">
-              <p className="text-purple-600 text-sm font-bold mb-1">סה&quot;כ מגיעים (אורחים)</p>
-              <p className="text-3xl font-black text-purple-900">{totalAttendingGuests}</p>
-            </div>
-            <div className="bg-green-50 p-4 rounded-2xl border border-green-100">
-              <p className="text-green-600 text-sm font-bold mb-1">אישרו הגעה (הזמנות)</p>
-              <p className="text-3xl font-black text-green-900">{totalAttendingInvites}</p>
-            </div>
-            <div className="bg-red-50 p-4 rounded-2xl border border-red-100">
-              <p className="text-red-600 text-sm font-bold mb-1">סירבו הגעה</p>
-              <p className="text-3xl font-black text-red-900">{totalDeclined}</p>
-            </div>
-            <div className="bg-amber-50 p-4 rounded-2xl border border-amber-100">
-              <p className="text-amber-600 text-sm font-bold mb-1">טרם ענו</p>
-              <p className="text-3xl font-black text-amber-900">{totalPending}</p>
-            </div>
+          </div>
+        )}
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="bg-purple-50 p-4 rounded-2xl border border-purple-100">
+            <p className="text-purple-600 text-sm font-bold mb-1">סה&quot;כ מגיעים (אורחים)</p>
+            <p className="text-3xl font-black text-purple-900">{totalAttendingGuests}</p>
+          </div>
+          <div className="bg-green-50 p-4 rounded-2xl border border-green-100">
+            <p className="text-green-600 text-sm font-bold mb-1">אישרו הגעה (הזמנות)</p>
+            <p className="text-3xl font-black text-green-900">{totalAttendingInvites}</p>
+          </div>
+          <div className="bg-red-50 p-4 rounded-2xl border border-red-100">
+            <p className="text-red-600 text-sm font-bold mb-1">סירבו הגעה</p>
+            <p className="text-3xl font-black text-red-900">{totalDeclined}</p>
+          </div>
+          <div className="bg-amber-50 p-4 rounded-2xl border border-amber-100">
+            <p className="text-amber-600 text-sm font-bold mb-1">טרם ענו</p>
+            <p className="text-3xl font-black text-amber-900">{totalPending}</p>
           </div>
         </div>
 
@@ -431,13 +424,11 @@ export default function AdminPage() {
             </div>
             <div className="p-4 h-56 overflow-y-auto font-mono text-sm space-y-1">
               {logs.length === 0 ? (
-                <p className="text-slate-500 text-xs">אין לוגים עדיין. לחץ על &quot;הפעל שליחה&quot; כדי לראות פעילות...</p>
+                <p className="text-slate-500 text-xs">אין לוגים עדיין...</p>
               ) : (
                 logs.map((log) => (
                   <div key={log.id} className="flex items-start gap-2 text-xs">
-                    <span className="text-slate-500 shrink-0">
-                      {new Date(log.created_at).toLocaleTimeString('he-IL')}
-                    </span>
+                    <span className="text-slate-500 shrink-0">{new Date(log.created_at).toLocaleTimeString('he-IL')}</span>
                     <span className={getLogColor(log.level)}>{log.message}</span>
                   </div>
                 ))
@@ -447,7 +438,7 @@ export default function AdminPage() {
           </div>
         )}
 
-        {/* Filters & Bulk Actions */}
+        {/* Guest List & Filters */}
         <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
             <div className="flex flex-wrap gap-2">
@@ -465,8 +456,8 @@ export default function AdminPage() {
               };
               const labelMap = {
                 pending:   { title: `שלח הודעה לכל ה-${totalPending} שטרם ענו`, sub: 'תזכורת – בקש לאשר או לסרב', btnText: 'שלח תזכורת לכולם 🚀' },
-                attending: { title: `שלח הודעה לכל ה-${totalAttendingInvites} מגיעים`, sub: 'לדוגמא: פרטי אירוע, הוראות הגעה ופרקינג', btnText: 'שלח לכל המגיעים 🎉' },
-                declined:  { title: `שלח הודעה לכל ה-${totalDeclined} שלא מגיעים`, sub: 'לדוגמא: הזמנה לאירוע הבא', btnText: 'שלח לכל שלא מגיעים' },
+                attending: { title: `שלח הודעה לכל ה-${totalAttendingInvites} מגיעים`, sub: 'מידע על האירוע', btnText: 'שלח לכל המגיעים 🎉' },
+                declined:  { title: `שלח הודעה לכל ה-${totalDeclined} שלא מגיעים`, sub: 'הודעת תודה בכל זאת', btnText: 'שלח לכל שלא מגיעים' },
               };
               const c = colorMap[filter as keyof typeof colorMap];
               const l = labelMap[filter as keyof typeof labelMap];
@@ -503,7 +494,7 @@ export default function AdminPage() {
                 <tr>
                   <th className="p-4">שם אורח</th>
                   <th className="p-4">טלפון</th>
-                  <th className="p-4">הוסיף על ידי</th>
+                  <th className="p-4">הוסיף</th>
                   <th className="p-4 text-center">כמות</th>
                   <th className="p-4">סטטוס</th>
                   <th className="p-4 text-center">אישור</th>
@@ -523,44 +514,24 @@ export default function AdminPage() {
                         {!guest.is_approved && <span className="text-[10px] bg-amber-500 text-white px-1.5 py-0.5 rounded font-bold">ממתין לאישור</span>}
                       </td>
                       <td className="p-4 text-slate-600 font-mono text-right" style={{direction: 'ltr'}}>{guest.phone}</td>
-                      <td className="p-4 text-slate-500 text-sm font-medium">{guest.added_by || 'מערכת'}</td>
-                      
+                      <td className="p-4 text-slate-500 text-sm">{guest.added_by || 'מערכת'}</td>
                       <td className="p-4 text-center font-bold text-slate-800">{guest.status === 'attending' ? guest.guests_count : '-'}</td>
-                      
                       <td className="p-4">
                         {guest.status === 'attending' && <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-100 text-green-700 font-bold text-xs"><CheckCircle2 className="w-3 h-3"/> אישר</span>}
                         {guest.status === 'declined' && <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-100 text-red-700 font-bold text-xs"><XCircle className="w-3 h-3"/> סירב</span>}
                         {guest.status === 'pending' && <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-700 font-bold text-xs"><HelpCircle className="w-3 h-3"/> טרם ענה</span>}
                       </td>
-
                       <td className="p-4 text-center">
                         {!guest.is_approved ? (
-                          <button 
-                            onClick={() => handleApproveGuest(guest.id)}
-                            className="p-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition"
-                            title="אשר אורח"
-                          >
-                            <CheckCircle2 className="w-5 h-5" />
-                          </button>
+                          <button onClick={() => handleApproveGuest(guest.id)} className="p-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition"><CheckCircle2 className="w-5 h-5" /></button>
                         ) : (
                           <div className="text-green-500 flex justify-center"><CheckCircle2 className="w-5 h-5" /></div>
                         )}
                       </td>
-
                       <td className="p-4">
                         <div className="flex items-center gap-2">
-                          <button 
-                            onClick={() => handleSendReminder(guest)}
-                            className="inline-flex items-center gap-2 px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white rounded-lg font-bold text-xs transition shadow-sm active:scale-95"
-                          >
-                            <Send className="w-4 h-4" />
-                          </button>
-                          <button 
-                            onClick={() => handleDeleteGuest(guest.id)}
-                            className="inline-flex items-center gap-2 px-3 py-1.5 bg-red-100 hover:bg-red-200 text-red-600 rounded-lg font-bold text-xs transition shadow-sm active:scale-95"
-                          >
-                            <XCircle className="w-4 h-4" />
-                          </button>
+                          <button onClick={() => handleSendReminder(guest)} className="p-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition shadow-sm"><Send className="w-4 h-4" /></button>
+                          <button onClick={() => handleDeleteGuest(guest.id)} className="p-2 bg-red-100 hover:bg-red-200 text-red-600 rounded-lg transition shadow-sm"><XCircle className="w-4 h-4" /></button>
                         </div>
                       </td>
                     </tr>

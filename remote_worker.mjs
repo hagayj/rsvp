@@ -135,8 +135,8 @@ async function processTelegramSync(job) {
   await supabase.from('jobs').update({ status: 'processing' }).eq('id', job.id);
 
   try {
-    // Run the script. Assumes python3 is in PATH and venv is not needed or handled globally
-    const { stdout, stderr } = await execAsync('python3 telegram_import.py --insert');
+    // Run the script using the local virtual environment
+    const { stdout, stderr } = await execAsync('./venv/bin/python3 telegram_import.py --insert');
     
     if (stderr) {
        await log(`⚠️ התראת מערכת בסנכרון: ${stderr}`, 'info');
