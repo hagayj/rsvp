@@ -71,41 +71,45 @@ export default function RSVPForm({ id, name, initialStatus, initialGuests }: RSV
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-start gap-3">
              <div className="bg-amber-100 p-2.5 rounded-xl text-amber-700">
               <MapPin className="w-6 h-6" />
             </div>
-            <div className="text-right flex-1">
-              <p className="font-bold text-lg">מוזיאון הטרקטור במושב עין ורד</p>
-              <div className="flex flex-wrap justify-center gap-2 mt-4">
-                <a 
-                  href="https://waze.com/ul?q=מוזיאון%20הטרקטור%20בשדה%20ורד" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#33CCFF] text-white text-[10px] font-bold rounded-full hover:shadow-lg transition-all active:scale-95"
-                >
-                  <img src="https://pngimg.com/uploads/waze/waze_PNG40.png" className="w-4 h-4 order-first" alt="Waze" />
-                  <span>ניווט בוויז</span>
-                </a>
-                
-                <a 
-                  href={`https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent("יום הולדת 80 לעמיר ז'ביליק 🚜")}&details=${encodeURIComponent(`נשמח לראותכם! לפרטים ואישור הגעה: ${typeof window !== 'undefined' ? window.location.origin : ''}/?id=${id}`)}&location=${encodeURIComponent("מוזיאון הטרקטור בעין ורד")}&dates=20260605T170000Z/20260605T210000Z`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#4285F4] text-white text-[10px] font-bold rounded-full hover:shadow-lg transition-all active:scale-95"
-                >
-                  <img src="https://www.gstatic.com/images/branding/product/1x/calendar_2020q4_48dp.png" className="w-4 h-4 order-first" alt="Google Calendar" />
-                  <span>יומן Google</span>
-                </a>
+            <div className="text-right flex-1 pt-0.5">
+              <p className="font-bold text-lg leading-tight">מוזיאון הטרקטור במושב עין ורד</p>
+              <p className="text-xs text-slate-500 font-medium italic mt-1">הזמנה אישית/זוגית ולא ניתנת להעברה</p>
+            </div>
+          </div>
 
-                <a 
-                  href={`/api/calendar?id=${id}`}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-600 text-white text-[10px] font-bold rounded-full hover:shadow-lg transition-all active:scale-95"
-                >
-                  <BellPlus className="w-4 h-4 order-first" />
-                  <span>יומן Apple/אחר</span>
-                </a>
-              </div>
+          <div className="flex flex-col gap-3 mt-2">
+            <a 
+              href="https://waze.com/ul?q=מוזיאון%20הטרקטור%20בשדה%20ורד" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-3 w-full py-4 bg-[#33CCFF] text-white text-base font-bold rounded-2xl shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
+            >
+              <span>ניווט בוויז</span>
+              <img src="https://pngimg.com/uploads/waze/waze_PNG40.png" className="w-6 h-6" alt="Waze" />
+            </a>
+            
+            <div className="flex gap-3">
+              <a 
+                href={`https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent("יום הולדת 80 לעמיר ז'ביליק 🚜")}&details=${encodeURIComponent(`נשמח לראותכם! לפרטים ואישור הגעה: ${typeof window !== 'undefined' ? window.location.origin : ''}/?id=${id}`)}&location=${encodeURIComponent("מוזיאון הטרקטור בעין ורד")}&dates=20260605T170000Z/20260605T210000Z`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 flex items-center justify-center gap-2 py-4 bg-[#4285F4] text-white text-sm font-bold rounded-2xl shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
+              >
+                <span>יומן Google</span>
+                <img src="https://www.gstatic.com/images/branding/product/1x/calendar_2020q4_48dp.png" className="w-5 h-5" alt="Google Calendar" />
+              </a>
+
+              <a 
+                href={`/api/calendar?id=${id}`}
+                className="flex-1 flex items-center justify-center gap-2 py-4 bg-green-600 text-white text-sm font-bold rounded-2xl shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
+              >
+                <span>יומן Apple</span>
+                <BellPlus className="w-5 h-5" />
+              </a>
             </div>
           </div>
         </div>
