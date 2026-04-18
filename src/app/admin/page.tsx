@@ -130,7 +130,10 @@ export default function AdminPage() {
       .channel('job-status')
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'jobs' },
         (payload) => {
-          const job = payload.new as { status: string };
+          const job = payload.new as { status: string, type: string };
+          if (job.status === 'completed') {
+            setIsTriggering(false);
+            setJobStatus(null);
             fetchGuests();
           } else if (job.status === 'processing') {
             setJobStatus(job.type === 'telegram_sync' ? 'מסנכרן מול טלגרם...' : 'המחשב בבית שולח הודעות...');
