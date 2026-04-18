@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RSVP Automation Project
 
-## Getting Started
+Welcome to the RSVP and WhatsApp Automation System. This project automates guest importing from Telegram and manual/bulk invitation sending via WhatsApp.
 
-First, run the development server:
+## 🚀 Quick Navigation
 
+- **[System Architecture](file:///Users/hagay/approvel/rsvp-app/ARCHITECTURE.md)**: How the components talk to each other.
+- **[Tools & Usage Guide](file:///Users/hagay/approvel/rsvp-app/TOOLS_GUIDE.md)**: How to use the Telegram scraper and WhatsApp worker.
+- **[Admin Dashboard](https://rsvp-app-sage.vercel.app/admin)**: Manage guests and send invitations (Password: `amir2026`).
+
+---
+
+## 🛠️ Main Workflows
+
+### 1. Adding New Guests from Telegram
+To fetch the latest contacts from the Telegram group:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Preview first
+python3 telegram_import.py
+
+# Import to DB
+python3 telegram_import.py --insert
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Starting the WhatsApp Worker (at the Office)
+The worker should start automatically on reboot via PM2. 
+To check if it's healthy:
+1. SSH into the office machine: `ssh hagay@192.168.0.240`.
+2. Run `pm2 status`.
+3. If it shows `rsvp-worker` is `online`, you are good to go.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📂 Project Structure
 
-## Learn More
+- `src/`: Next.js web application (Frontend & API).
+- `telegram_import.py`: Python script for Telegram guest extraction.
+- `remote_worker.mjs`: Node.js script for WhatsApp automation (run on remote server).
+- `contacts_import.json`: Audit log of the last Telegram scan.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🔑 Key Credentials
+- **Supabase**: Managed through the `.env.local` file.
+- **Telegram API**: Configured inside `telegram_import.py`.
+- **Remote Server**: `192.168.0.240` (User: `hagay`, Password: `12322123`).

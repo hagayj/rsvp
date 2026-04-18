@@ -1,0 +1,2000 @@
+[
+  {
+    "msg_num": 1,
+    "sent_at": "2026-04-17 08:47",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "מיכל סגל",
+    "phone": "+972522723553"
+  },
+  {
+    "msg_num": 2,
+    "sent_at": "2026-04-17 08:46",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "עזרא הדר יבניאל",
+    "phone": "+972546176511"
+  },
+  {
+    "msg_num": 3,
+    "sent_at": "2026-04-17 08:05",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "עודד רף",
+    "phone": "+972526701294"
+  },
+  {
+    "msg_num": 4,
+    "sent_at": "2026-04-16 05:30",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "איתן תואם תי אף סי",
+    "phone": "+972525256562"
+  },
+  {
+    "msg_num": 5,
+    "sent_at": "2026-04-14 15:47",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "דליה ליפשיץ יבניאל",
+    "phone": "+972509936988"
+  },
+  {
+    "msg_num": 6,
+    "sent_at": "2026-04-13 15:14",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "אסנת /פלמח",
+    "phone": "+972546616181"
+  },
+  {
+    "msg_num": 7,
+    "sent_at": "2026-04-13 15:14",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "שרלה ירום",
+    "phone": "+972544697777"
+  },
+  {
+    "msg_num": 8,
+    "sent_at": "2026-04-13 15:14",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "דורית קוגהוט",
+    "phone": "+972522487739"
+  },
+  {
+    "msg_num": 9,
+    "sent_at": "2026-04-13 15:14",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "אור גלעד",
+    "phone": "+972526822772"
+  },
+  {
+    "msg_num": 10,
+    "sent_at": "2026-04-13 15:14",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "איירה גבי",
+    "phone": "+972547496162"
+  },
+  {
+    "msg_num": 11,
+    "sent_at": "2026-04-13 06:18",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "אריה שחר נעמה",
+    "phone": "+972505351663"
+  },
+  {
+    "msg_num": 12,
+    "sent_at": "2026-04-12 18:16",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "לא איש קשר (EMPTY/SERVICE MESSAGE)",
+    "name": "",
+    "phone": ""
+  },
+  {
+    "msg_num": 13,
+    "sent_at": "2026-04-12 17:44",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "אריה שחר נעמה",
+    "phone": "+972505351663"
+  },
+  {
+    "msg_num": 14,
+    "sent_at": "2026-04-12 15:17",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "רוני קפלן",
+    "phone": "+972505339940"
+  },
+  {
+    "msg_num": 15,
+    "sent_at": "2026-04-12 15:16",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "רמת הכובש פרדס מולי",
+    "phone": "+972509685552"
+  },
+  {
+    "msg_num": 16,
+    "sent_at": "2026-04-12 15:15",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "אריה שחר נעמה",
+    "phone": "+972505351663"
+  },
+  {
+    "msg_num": 17,
+    "sent_at": "2026-04-12 15:14",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "אריה שחר נעמה",
+    "phone": "+972505351663"
+  },
+  {
+    "msg_num": 18,
+    "sent_at": "2026-04-12 15:09",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "אורית גבת",
+    "phone": "+972544723387"
+  },
+  {
+    "msg_num": 19,
+    "sent_at": "2026-04-12 14:51",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "שטרן שי",
+    "phone": "+972525611148"
+  },
+  {
+    "msg_num": 20,
+    "sent_at": "2026-04-12 14:49",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "בוגה יפעת",
+    "phone": "+972522695531"
+  },
+  {
+    "msg_num": 21,
+    "sent_at": "2026-04-12 14:47",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "אמנון ליבוביץ",
+    "phone": "+972549175437"
+  },
+  {
+    "msg_num": 22,
+    "sent_at": "2026-04-12 14:45",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "בועז לביא",
+    "phone": "+972505389709"
+  },
+  {
+    "msg_num": 23,
+    "sent_at": "2026-04-12 14:43",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "עוזי עשת",
+    "phone": "+972507348102"
+  },
+  {
+    "msg_num": 24,
+    "sent_at": "2026-04-12 14:40",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "סמי מוצפי",
+    "phone": "+972502009691"
+  },
+  {
+    "msg_num": 25,
+    "sent_at": "2026-04-12 14:38",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "שוהם יעל",
+    "phone": "+972506586898"
+  },
+  {
+    "msg_num": 26,
+    "sent_at": "2026-04-12 14:35",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "עמית רוזנברג כ.גלעדי",
+    "phone": "+972507336692"
+  },
+  {
+    "msg_num": 27,
+    "sent_at": "2026-04-12 14:31",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "ישראל ניר עבודות",
+    "phone": "+972504237303"
+  },
+  {
+    "msg_num": 28,
+    "sent_at": "2026-04-12 14:29",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "מיסטר ראש פינה",
+    "phone": "+972544976940"
+  },
+  {
+    "msg_num": 29,
+    "sent_at": "2026-04-12 14:25",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "כהנוב גדרה",
+    "phone": "+972522509815"
+  },
+  {
+    "msg_num": 30,
+    "sent_at": "2026-04-12 14:17",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "גיא צוק",
+    "phone": "+97250219840"
+  },
+  {
+    "msg_num": 31,
+    "sent_at": "2026-04-12 14:16",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "לא איש קשר (TEXT: \"גיאצוק\")",
+    "name": "",
+    "phone": ""
+  },
+  {
+    "msg_num": 32,
+    "sent_at": "2026-04-12 14:13",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "עמיחי כהן",
+    "phone": "+972505231822"
+  },
+  {
+    "msg_num": 33,
+    "sent_at": "2026-03-25 10:57",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "Levy Skalka",
+    "phone": "+972544982196"
+  },
+  {
+    "msg_num": 34,
+    "sent_at": "2026-03-25 10:53",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "מוטי פרידמן",
+    "phone": "+972522291301"
+  },
+  {
+    "msg_num": 35,
+    "sent_at": "2026-03-25 10:51",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "הלוי מוסה",
+    "phone": "+972522515820"
+  },
+  {
+    "msg_num": 36,
+    "sent_at": "2026-03-25 10:42",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "שרה רמת ישי",
+    "phone": "+972506654189"
+  },
+  {
+    "msg_num": 37,
+    "sent_at": "2026-03-25 10:41",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "שלום פרץ",
+    "phone": "+972547911281"
+  },
+  {
+    "msg_num": 38,
+    "sent_at": "2026-03-25 10:40",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "הדר קוסמטיקה ויצמן",
+    "phone": "+972546373338"
+  },
+  {
+    "msg_num": 39,
+    "sent_at": "2026-03-25 10:37",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "רמה סגל",
+    "phone": "+972506599961"
+  },
+  {
+    "msg_num": 40,
+    "sent_at": "2026-03-25 10:35",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "אסתי טריגולו",
+    "phone": "+972547860575"
+  },
+  {
+    "msg_num": 41,
+    "sent_at": "2026-03-25 10:32",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "נעמי בן ארי",
+    "phone": "+972508466622"
+  },
+  {
+    "msg_num": 42,
+    "sent_at": "2026-03-25 10:26",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "משה שחר",
+    "phone": "+972508225522"
+  },
+  {
+    "msg_num": 43,
+    "sent_at": "2026-03-25 10:26",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "משה שחר",
+    "phone": "+972508225522"
+  },
+  {
+    "msg_num": 44,
+    "sent_at": "2026-03-25 10:16",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "ליבל משה גבעתיים",
+    "phone": "+972522380682"
+  },
+  {
+    "msg_num": 45,
+    "sent_at": "2026-03-25 10:14",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "זוהרה תל עדשים",
+    "phone": "+972522274412"
+  },
+  {
+    "msg_num": 46,
+    "sent_at": "2026-03-25 10:11",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "איריס בלום",
+    "phone": "+972544652291"
+  },
+  {
+    "msg_num": 47,
+    "sent_at": "2026-03-25 10:09",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "איוי",
+    "phone": "+972523468436"
+  },
+  {
+    "msg_num": 48,
+    "sent_at": "2026-03-25 10:07",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "אורית קמה",
+    "phone": "+972523221999"
+  },
+  {
+    "msg_num": 49,
+    "sent_at": "2026-03-25 10:04",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "שולה-חנות הכל בזול",
+    "phone": "+972504060057"
+  },
+  {
+    "msg_num": 50,
+    "sent_at": "2026-03-25 09:56",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "אורית דייך",
+    "phone": "+972526421543"
+  },
+  {
+    "msg_num": 51,
+    "sent_at": "2026-03-25 09:50",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "גלי שחם",
+    "phone": "+972507627587"
+  },
+  {
+    "msg_num": 52,
+    "sent_at": "2026-03-17 14:43",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "אריה גבאי",
+    "phone": "+972522818818"
+  },
+  {
+    "msg_num": 53,
+    "sent_at": "2026-03-15 16:56",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "צורי",
+    "phone": "+972522521806"
+  },
+  {
+    "msg_num": 54,
+    "sent_at": "2026-03-15 09:20",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "עידו בית השיטה",
+    "phone": "+972528886911"
+  },
+  {
+    "msg_num": 55,
+    "sent_at": "2026-03-15 09:19",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "מתי מודד",
+    "phone": "+972508828575"
+  },
+  {
+    "msg_num": 56,
+    "sent_at": "2026-03-15 09:15",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "קרניאל אהרון",
+    "phone": "+972526657973"
+  },
+  {
+    "msg_num": 57,
+    "sent_at": "2026-03-15 09:09",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "שלמה רזילי כפר בלום",
+    "phone": "+972547948401"
+  },
+  {
+    "msg_num": 58,
+    "sent_at": "2026-03-15 09:07",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "סאקי זכרון יעקב",
+    "phone": "+972505233806"
+  },
+  {
+    "msg_num": 59,
+    "sent_at": "2026-03-15 08:57",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "דודו ראובני יבניאל",
+    "phone": "+972544299673"
+  },
+  {
+    "msg_num": 60,
+    "sent_at": "2026-03-07 19:45",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "רון פרונרמן",
+    "phone": "+972528669235"
+  },
+  {
+    "msg_num": 61,
+    "sent_at": "2026-03-07 19:45",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "פיני בדש",
+    "phone": "+972505239954"
+  },
+  {
+    "msg_num": 62,
+    "sent_at": "2026-03-07 19:45",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "פנינה גלעד",
+    "phone": "+972507706681"
+  },
+  {
+    "msg_num": 63,
+    "sent_at": "2026-03-07 19:45",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "ברמס  עמוס",
+    "phone": "+972545688655"
+  },
+  {
+    "msg_num": 64,
+    "sent_at": "2026-03-07 19:45",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "מיקי ניר עבודות",
+    "phone": "+972504237301"
+  },
+  {
+    "msg_num": 65,
+    "sent_at": "2026-03-07 19:45",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "מיכה שטרן בניה",
+    "phone": "+972505238733"
+  },
+  {
+    "msg_num": 66,
+    "sent_at": "2026-03-07 19:45",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "שמעון שביט",
+    "phone": "+972505254009"
+  },
+  {
+    "msg_num": 67,
+    "sent_at": "2026-03-07 19:45",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "שרלה שרון",
+    "phone": "+972523739466"
+  },
+  {
+    "msg_num": 68,
+    "sent_at": "2026-03-07 11:51",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "שטרן שי",
+    "phone": "+972525611148"
+  },
+  {
+    "msg_num": 69,
+    "sent_at": "2026-03-07 11:51",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "שבתאי גלאון",
+    "phone": "+972528767187"
+  },
+  {
+    "msg_num": 70,
+    "sent_at": "2026-03-07 11:51",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "רף אריה",
+    "phone": "+972505300902"
+  },
+  {
+    "msg_num": 71,
+    "sent_at": "2026-03-07 11:51",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "רוני קפלן",
+    "phone": "+972505339940"
+  },
+  {
+    "msg_num": 72,
+    "sent_at": "2026-03-07 11:51",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "זאביק רף",
+    "phone": "+972505349507"
+  },
+  {
+    "msg_num": 73,
+    "sent_at": "2026-03-07 11:51",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "חיים שמחי רפד",
+    "phone": "+972526413294"
+  },
+  {
+    "msg_num": 74,
+    "sent_at": "2026-03-07 11:51",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "רוני לוי",
+    "phone": "+972523364655"
+  },
+  {
+    "msg_num": 75,
+    "sent_at": "2026-03-07 11:51",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "יחיא צדוק",
+    "phone": "+972544255292"
+  },
+  {
+    "msg_num": 76,
+    "sent_at": "2026-03-07 11:51",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "ציונה",
+    "phone": "+972527908574"
+  },
+  {
+    "msg_num": 77,
+    "sent_at": "2026-03-07 11:51",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "יהודה ציזלר",
+    "phone": "+972523995737"
+  },
+  {
+    "msg_num": 78,
+    "sent_at": "2026-03-07 11:51",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "מוטי פרידמן",
+    "phone": "+972522291301"
+  },
+  {
+    "msg_num": 79,
+    "sent_at": "2026-03-06 12:10",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "עמי וניש",
+    "phone": "+97246769946"
+  },
+  {
+    "msg_num": 80,
+    "sent_at": "2026-03-06 12:10",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "עמי אוסובסקי",
+    "phone": "+972523203741"
+  },
+  {
+    "msg_num": 81,
+    "sent_at": "2026-03-06 12:10",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "אלכס מניר",
+    "phone": "+972504237302"
+  },
+  {
+    "msg_num": 82,
+    "sent_at": "2026-03-06 12:10",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "בוכבינדר עודד",
+    "phone": "+972547596451"
+  },
+  {
+    "msg_num": 83,
+    "sent_at": "2026-03-06 12:10",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "מיקי ניר עבודות",
+    "phone": "+972504237301"
+  },
+  {
+    "msg_num": 84,
+    "sent_at": "2026-03-06 12:10",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "פיטרו",
+    "phone": "+972546800610"
+  },
+  {
+    "msg_num": 85,
+    "sent_at": "2026-03-06 12:10",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "נועם",
+    "phone": "+972505678534"
+  },
+  {
+    "msg_num": 86,
+    "sent_at": "2026-03-06 12:10",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "רון פרונרמן",
+    "phone": "+972528669235"
+  },
+  {
+    "msg_num": 87,
+    "sent_at": "2026-03-06 12:10",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "מזרחי מוטי",
+    "phone": "+972544455610"
+  },
+  {
+    "msg_num": 88,
+    "sent_at": "2026-03-06 12:10",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "שמוליק (מנדי)",
+    "phone": "+972548265000"
+  },
+  {
+    "msg_num": 89,
+    "sent_at": "2026-03-06 11:25",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "מתי עודד",
+    "phone": "+972524826702"
+  },
+  {
+    "msg_num": 90,
+    "sent_at": "2026-03-06 11:25",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "ראובן מטמון  רים מטמון",
+    "phone": "+972523847330"
+  },
+  {
+    "msg_num": 91,
+    "sent_at": "2026-03-06 11:25",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "עודד שהם מוביל שירה",
+    "phone": "+972549492022"
+  },
+  {
+    "msg_num": 92,
+    "sent_at": "2026-03-06 11:25",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "משה פלד",
+    "phone": "+972507234442"
+  },
+  {
+    "msg_num": 93,
+    "sent_at": "2026-03-06 11:25",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "מיכה גולדמן",
+    "phone": "+972505214066"
+  },
+  {
+    "msg_num": 94,
+    "sent_at": "2026-03-06 11:25",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "מיכה פיודיק מיכה",
+    "phone": "+972505529666"
+  },
+  {
+    "msg_num": 95,
+    "sent_at": "2026-03-06 11:25",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "מיכאל מכלוף ניר עבודות",
+    "phone": "+972504237300"
+  },
+  {
+    "msg_num": 96,
+    "sent_at": "2026-03-06 11:25",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "איציק מרקדו",
+    "phone": "+972584214882"
+  },
+  {
+    "msg_num": 97,
+    "sent_at": "2026-03-06 11:25",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "מוטי פרידמן",
+    "phone": "+972522291301"
+  },
+  {
+    "msg_num": 98,
+    "sent_at": "2026-03-06 11:25",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "מטביוב שרלה",
+    "phone": "+972502282650"
+  },
+  {
+    "msg_num": 99,
+    "sent_at": "2026-03-06 11:25",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "מומו של בתיה",
+    "phone": "+972505214298"
+  },
+  {
+    "msg_num": 100,
+    "sent_at": "2026-03-06 11:25",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "פאול פליישר מרחביה",
+    "phone": "+972523678266"
+  },
+  {
+    "msg_num": 101,
+    "sent_at": "2026-03-06 11:25",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "מור גודארד בארי",
+    "phone": "+972547918512"
+  },
+  {
+    "msg_num": 102,
+    "sent_at": "2026-03-04 04:02",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "משה צפירה",
+    "phone": "+972505662243"
+  },
+  {
+    "msg_num": 103,
+    "sent_at": "2026-03-04 04:02",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "מדנס שוקי",
+    "phone": "+972544309730"
+  },
+  {
+    "msg_num": 104,
+    "sent_at": "2026-03-04 04:02",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "מרדור רמי",
+    "phone": "+972522000900"
+  },
+  {
+    "msg_num": 105,
+    "sent_at": "2026-03-04 04:02",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "מודי הוכמן",
+    "phone": "+972505377922"
+  },
+  {
+    "msg_num": 106,
+    "sent_at": "2026-03-04 04:02",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "לייבל של אורית",
+    "phone": "+972537205002"
+  },
+  {
+    "msg_num": 107,
+    "sent_at": "2026-03-04 04:02",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "רקלין זיו",
+    "phone": "+972505213054"
+  },
+  {
+    "msg_num": 108,
+    "sent_at": "2026-03-04 04:02",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "ירון זיו",
+    "phone": "+972529243213"
+  },
+  {
+    "msg_num": 109,
+    "sent_at": "2026-03-04 04:02",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "זאביק רף",
+    "phone": "+972505349507"
+  },
+  {
+    "msg_num": 110,
+    "sent_at": "2026-03-04 04:02",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "יאיר ורד",
+    "phone": "+972547552162"
+  },
+  {
+    "msg_num": 111,
+    "sent_at": "2026-03-04 04:02",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "וזה אבישי",
+    "phone": "+972506241580"
+  },
+  {
+    "msg_num": 112,
+    "sent_at": "2026-03-01 06:21",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "שאול ליבר",
+    "phone": "+972506654344"
+  },
+  {
+    "msg_num": 113,
+    "sent_at": "2026-03-01 06:21",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "רוני לוי",
+    "phone": "+972523364655"
+  },
+  {
+    "msg_num": 114,
+    "sent_at": "2026-03-01 06:21",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "גדעון כרמלי",
+    "phone": "+972505652240"
+  },
+  {
+    "msg_num": 115,
+    "sent_at": "2026-03-01 06:21",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "יפה עמוס",
+    "phone": "+972505247441"
+  },
+  {
+    "msg_num": 116,
+    "sent_at": "2026-03-01 06:21",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "תרשיש משה יפעת",
+    "phone": "+972523204520"
+  },
+  {
+    "msg_num": 117,
+    "sent_at": "2026-03-01 06:21",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "יהודה של לאה",
+    "phone": "+972522434894"
+  },
+  {
+    "msg_num": 118,
+    "sent_at": "2026-03-01 06:21",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "יונו איילת",
+    "phone": "+972523668825"
+  },
+  {
+    "msg_num": 119,
+    "sent_at": "2026-03-01 06:21",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "ישראל רובין",
+    "phone": "+972504237304"
+  },
+  {
+    "msg_num": 120,
+    "sent_at": "2026-03-01 06:21",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "נידרמן ישראל",
+    "phone": "+972505262957"
+  },
+  {
+    "msg_num": 121,
+    "sent_at": "2026-03-01 06:21",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "שרה רמת ישי",
+    "phone": "+972506654189"
+  },
+  {
+    "msg_num": 122,
+    "sent_at": "2026-03-01 04:36",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "ישי מאיר",
+    "phone": "+972522793666"
+  },
+  {
+    "msg_num": 123,
+    "sent_at": "2026-03-01 04:36",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "רוזנקרנץ יאיר",
+    "phone": "+972535718306"
+  },
+  {
+    "msg_num": 124,
+    "sent_at": "2026-03-01 04:36",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "עופר  טבעון",
+    "phone": "+972522821045"
+  },
+  {
+    "msg_num": 125,
+    "sent_at": "2026-03-01 04:36",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "גלילי  טל",
+    "phone": "+972523668809"
+  },
+  {
+    "msg_num": 126,
+    "sent_at": "2026-03-01 04:36",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "טלי טלטלי",
+    "phone": "+972526787732"
+  },
+  {
+    "msg_num": 127,
+    "sent_at": "2026-03-01 04:36",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "גילבגיסר חיה",
+    "phone": "+972545988822"
+  },
+  {
+    "msg_num": 128,
+    "sent_at": "2026-03-01 04:36",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "חיים שמחי רפד",
+    "phone": "+972526413294"
+  },
+  {
+    "msg_num": 129,
+    "sent_at": "2026-03-01 04:36",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "ישראל חסון",
+    "phone": "+972545988853"
+  },
+  {
+    "msg_num": 130,
+    "sent_at": "2026-03-01 04:36",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "זוהר ניר יצחק",
+    "phone": "+972524269329"
+  },
+  {
+    "msg_num": 131,
+    "sent_at": "2026-03-01 04:36",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "סאקי זכרון יעקב",
+    "phone": "+972505233806"
+  },
+  {
+    "msg_num": 132,
+    "sent_at": "2026-03-01 04:36",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "זיו רחל",
+    "phone": "+972545659081"
+  },
+  {
+    "msg_num": 133,
+    "sent_at": "2026-02-28 06:29",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "הראל יעקב",
+    "phone": "+972505216464"
+  },
+  {
+    "msg_num": 134,
+    "sent_at": "2026-02-28 06:29",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "רונית הורביץ",
+    "phone": "+972505772727"
+  },
+  {
+    "msg_num": 135,
+    "sent_at": "2026-02-28 06:29",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "משה פלד",
+    "phone": "+972507234442"
+  },
+  {
+    "msg_num": 136,
+    "sent_at": "2026-02-28 06:29",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "דדי 2",
+    "phone": "+972559908762"
+  },
+  {
+    "msg_num": 137,
+    "sent_at": "2026-02-28 06:29",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "דביר מוטי",
+    "phone": "+972544262423"
+  },
+  {
+    "msg_num": 138,
+    "sent_at": "2026-02-28 06:29",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "דודלה",
+    "phone": "+972524767542"
+  },
+  {
+    "msg_num": 139,
+    "sent_at": "2026-02-28 06:29",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "דפנה מוטי מזרחי",
+    "phone": "+972507848168"
+  },
+  {
+    "msg_num": 140,
+    "sent_at": "2026-02-28 06:29",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "גלילי דרור",
+    "phone": "+972542446777"
+  },
+  {
+    "msg_num": 141,
+    "sent_at": "2026-02-28 06:29",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "דני פלד הזורע",
+    "phone": "+972523990667"
+  },
+  {
+    "msg_num": 142,
+    "sent_at": "2026-02-28 06:29",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "דובי פרגמנט",
+    "phone": "+972526166998"
+  },
+  {
+    "msg_num": 143,
+    "sent_at": "2026-02-28 06:29",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "דר  חזן דוד",
+    "phone": "+972507298322"
+  },
+  {
+    "msg_num": 144,
+    "sent_at": "2026-02-28 04:27",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "מכון דיזל אליס אמיר",
+    "phone": "+972547923700"
+  },
+  {
+    "msg_num": 145,
+    "sent_at": "2026-02-28 04:27",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "דני קרמר",
+    "phone": "+972548026226"
+  },
+  {
+    "msg_num": 146,
+    "sent_at": "2026-02-28 04:27",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "דודיק קליין",
+    "phone": "+972545222322"
+  },
+  {
+    "msg_num": 147,
+    "sent_at": "2026-02-28 04:27",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "דוד וודובוז מוזיאון עין וורד",
+    "phone": "+972523995667"
+  },
+  {
+    "msg_num": 148,
+    "sent_at": "2026-02-28 04:27",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "דני זביליק",
+    "phone": "+972508847707"
+  },
+  {
+    "msg_num": 149,
+    "sent_at": "2026-02-28 04:27",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "דני קרמר",
+    "phone": "+972548026226"
+  },
+  {
+    "msg_num": 150,
+    "sent_at": "2026-02-28 04:27",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "דניה גלילי",
+    "phone": "+972522944596"
+  },
+  {
+    "msg_num": 151,
+    "sent_at": "2026-02-28 04:27",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "כנרתי גל",
+    "phone": "+972507989777"
+  },
+  {
+    "msg_num": 152,
+    "sent_at": "2026-02-28 04:27",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "פנינה גלעד",
+    "phone": "+972507706681"
+  },
+  {
+    "msg_num": 153,
+    "sent_at": "2026-02-28 04:27",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "מוריס של גולי",
+    "phone": "+972528499217"
+  },
+  {
+    "msg_num": 154,
+    "sent_at": "2026-02-28 04:27",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "יואח צורי",
+    "phone": "+972505470750"
+  },
+  {
+    "msg_num": 155,
+    "sent_at": "2026-02-28 04:27",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "שלמה רזילי כפר בלום",
+    "phone": "+972547948401"
+  },
+  {
+    "msg_num": 156,
+    "sent_at": "2026-02-28 04:27",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "בוכבינדר עודד",
+    "phone": "+972547596451"
+  },
+  {
+    "msg_num": 157,
+    "sent_at": "2026-02-27 06:55",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "בתיה מומו",
+    "phone": "+972523424097"
+  },
+  {
+    "msg_num": 158,
+    "sent_at": "2026-02-27 06:55",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "יוסי בבד",
+    "phone": "+972544446472"
+  },
+  {
+    "msg_num": 159,
+    "sent_at": "2026-02-27 06:55",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "מיכה ברנר",
+    "phone": "+972505462229"
+  },
+  {
+    "msg_num": 160,
+    "sent_at": "2026-02-27 06:55",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "בני הלבן",
+    "phone": "+972505462160"
+  },
+  {
+    "msg_num": 161,
+    "sent_at": "2026-02-27 06:55",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "עידו בית השיטה",
+    "phone": "+972528886911"
+  },
+  {
+    "msg_num": 162,
+    "sent_at": "2026-02-27 06:55",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "שירין בן יעקב",
+    "phone": "+972543294295"
+  },
+  {
+    "msg_num": 163,
+    "sent_at": "2026-02-27 06:55",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "מיכה ברנר",
+    "phone": "+972505462229"
+  },
+  {
+    "msg_num": 164,
+    "sent_at": "2026-02-27 06:55",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "מומו של בתיה",
+    "phone": "+972505214298"
+  },
+  {
+    "msg_num": 165,
+    "sent_at": "2026-02-27 06:55",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "איבי",
+    "phone": "+972524546633"
+  },
+  {
+    "msg_num": 166,
+    "sent_at": "2026-02-27 06:55",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "בוכבינדר רן",
+    "phone": "+972503990519"
+  },
+  {
+    "msg_num": 167,
+    "sent_at": "2026-02-26 23:35",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "מרדור בוסי",
+    "phone": "+972547444004"
+  },
+  {
+    "msg_num": 168,
+    "sent_at": "2026-02-26 23:35",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "מור גודארד בארי",
+    "phone": "+972547918512"
+  },
+  {
+    "msg_num": 169,
+    "sent_at": "2026-02-26 23:35",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "פיני בדש",
+    "phone": "+972505239954"
+  },
+  {
+    "msg_num": 170,
+    "sent_at": "2026-02-26 23:35",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "בנימין ברעם",
+    "phone": "+972528313807"
+  },
+  {
+    "msg_num": 171,
+    "sent_at": "2026-02-26 23:35",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "מנדי של בילי",
+    "phone": "+972505745254"
+  },
+  {
+    "msg_num": 172,
+    "sent_at": "2026-02-26 23:35",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "מור גודארד בארי",
+    "phone": "+972547918512"
+  },
+  {
+    "msg_num": 173,
+    "sent_at": "2026-02-26 23:35",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "פיני בדש",
+    "phone": "+972505239954"
+  },
+  {
+    "msg_num": 174,
+    "sent_at": "2026-02-26 23:35",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "איתן ברושי",
+    "phone": "+972505256781"
+  },
+  {
+    "msg_num": 175,
+    "sent_at": "2026-02-26 23:35",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "ארז פיודיק  ארז",
+    "phone": "+97255535906"
+  },
+  {
+    "msg_num": 176,
+    "sent_at": "2026-02-26 23:35",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "אסתי של מיכה",
+    "phone": "+9725463670100"
+  },
+  {
+    "msg_num": 177,
+    "sent_at": "2026-02-26 23:35",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "אבי רזניק",
+    "phone": "+972525328762"
+  },
+  {
+    "msg_num": 178,
+    "sent_at": "2026-02-26 23:35",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "הבלם אהרון",
+    "phone": "+972548070084"
+  },
+  {
+    "msg_num": 179,
+    "sent_at": "2026-02-26 23:35",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "שמעון גמרו געתון",
+    "phone": "+972523744950"
+  },
+  {
+    "msg_num": 180,
+    "sent_at": "2026-02-26 05:05",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "יואב אפרטי",
+    "phone": "+972505377029"
+  },
+  {
+    "msg_num": 181,
+    "sent_at": "2026-02-26 05:05",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "איציק ביניונסקי",
+    "phone": "+972522532943"
+  },
+  {
+    "msg_num": 182,
+    "sent_at": "2026-02-26 05:05",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "אלכס מניר",
+    "phone": "+972504237302"
+  },
+  {
+    "msg_num": 183,
+    "sent_at": "2026-02-26 05:05",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "כהן אלון",
+    "phone": "+972505501541"
+  },
+  {
+    "msg_num": 184,
+    "sent_at": "2026-02-26 05:05",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "אלון",
+    "phone": "+972528088487"
+  },
+  {
+    "msg_num": 185,
+    "sent_at": "2026-02-26 05:05",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "אלכס מניר",
+    "phone": "+972504237302"
+  },
+  {
+    "msg_num": 186,
+    "sent_at": "2026-02-26 05:05",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "איל רודוי",
+    "phone": "+972505282470"
+  },
+  {
+    "msg_num": 187,
+    "sent_at": "2026-02-26 04:36",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "אורית גבת",
+    "phone": "+972542408303"
+  },
+  {
+    "msg_num": 188,
+    "sent_at": "2026-02-26 04:36",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "רף אריה",
+    "phone": "+972505300902"
+  },
+  {
+    "msg_num": 189,
+    "sent_at": "2026-02-26 04:36",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "אילן כהן",
+    "phone": "+972507552505"
+  },
+  {
+    "msg_num": 190,
+    "sent_at": "2026-02-25 19:25",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "גלילי  אלי",
+    "phone": "+972523668810"
+  },
+  {
+    "msg_num": 191,
+    "sent_at": "2026-02-25 19:25",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "אמנון עצמונה",
+    "phone": "+972545684405"
+  },
+  {
+    "msg_num": 192,
+    "sent_at": "2026-02-25 19:25",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "ארז מילשטין מוזיאון",
+    "phone": "+972522452457"
+  },
+  {
+    "msg_num": 193,
+    "sent_at": "2026-02-25 19:25",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "קרניאל אבשלום",
+    "phone": "+972505241539"
+  },
+  {
+    "msg_num": 194,
+    "sent_at": "2026-02-25 19:25",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "פאר אמנון",
+    "phone": "+972522785252"
+  },
+  {
+    "msg_num": 195,
+    "sent_at": "2026-02-25 19:25",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "אברי ברייר",
+    "phone": "+972503130003"
+  },
+  {
+    "msg_num": 196,
+    "sent_at": "2026-02-25 19:25",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "ציפי אשר אמא אייל",
+    "phone": "+972528239325"
+  },
+  {
+    "msg_num": 197,
+    "sent_at": "2026-02-25 19:25",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "מנחם אילת השח",
+    "phone": "+972523770581"
+  },
+  {
+    "msg_num": 198,
+    "sent_at": "2026-02-25 19:25",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "סלע אריה",
+    "phone": "+972505210891"
+  },
+  {
+    "msg_num": 199,
+    "sent_at": "2026-02-25 19:25",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "אורן סלע",
+    "phone": "+972549004994"
+  },
+  {
+    "msg_num": 200,
+    "sent_at": "2026-02-25 14:44",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "דורון אילת השחר",
+    "phone": "+972526552722"
+  },
+  {
+    "msg_num": 201,
+    "sent_at": "2026-02-25 14:43",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "אריה שחר נעמה",
+    "phone": "+972505351663"
+  },
+  {
+    "msg_num": 202,
+    "sent_at": "2026-02-25 14:43",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "אבי הדר יבניאל",
+    "phone": "+972548092008"
+  },
+  {
+    "msg_num": 203,
+    "sent_at": "2026-02-25 14:42",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "אסנת של גברוש",
+    "phone": "+972522425997"
+  },
+  {
+    "msg_num": 204,
+    "sent_at": "2026-02-25 14:41",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "חנה אובוהסקי",
+    "phone": "+972523260782"
+  },
+  {
+    "msg_num": 205,
+    "sent_at": "2026-02-25 14:41",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "ארז קמה",
+    "phone": "+972527929769"
+  },
+  {
+    "msg_num": 206,
+    "sent_at": "2026-02-25 14:40",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "אילנה של בם",
+    "phone": "+972544216350"
+  },
+  {
+    "msg_num": 207,
+    "sent_at": "2026-02-25 14:39",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "אמיר סלע",
+    "phone": "+972508510444"
+  },
+  {
+    "msg_num": 208,
+    "sent_at": "2026-02-25 14:39",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "אריה המר בם",
+    "phone": "+972506330843"
+  },
+  {
+    "msg_num": 209,
+    "sent_at": "2026-02-25 14:38",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "ארז יסקין",
+    "phone": "+972502661430"
+  },
+  {
+    "msg_num": 210,
+    "sent_at": "2026-02-25 14:37",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "נעמי אלקובי אילניה",
+    "phone": "+972522811708"
+  },
+  {
+    "msg_num": 211,
+    "sent_at": "2026-02-25 14:37",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "אושרה",
+    "phone": "+972507058888"
+  },
+  {
+    "msg_num": 212,
+    "sent_at": "2026-02-25 14:36",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "אילנה כרמי",
+    "phone": "+972507440492"
+  },
+  {
+    "msg_num": 213,
+    "sent_at": "2026-02-25 14:33",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "אילנה כרמי",
+    "phone": "+972507440492"
+  },
+  {
+    "msg_num": 214,
+    "sent_at": "2026-02-25 14:28",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "איציק אוחיון בית חולים עפולה",
+    "phone": "+972528723236"
+  },
+  {
+    "msg_num": 215,
+    "sent_at": "2026-02-25 14:22",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "אמציה קרמר",
+    "phone": "+972545531555"
+  },
+  {
+    "msg_num": 216,
+    "sent_at": "2026-02-25 07:39",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "דוד ארד יבניאל",
+    "phone": "+972545602307"
+  },
+  {
+    "msg_num": 217,
+    "sent_at": "2026-02-24 18:46",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "דוד ארד יבניאל",
+    "phone": "+972545602307"
+  },
+  {
+    "msg_num": 218,
+    "sent_at": "2026-02-24 18:40",
+    "sender": "H12543j",
+    "is_valid": false,
+    "reason": "לא איש קשר (EMPTY/SERVICE MESSAGE)",
+    "name": "",
+    "phone": ""
+  },
+  {
+    "msg_num": 219,
+    "sent_at": "2026-02-24 18:39",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "לא איש קשר (DOCUMENT/FILE)",
+    "name": "",
+    "phone": ""
+  },
+  {
+    "msg_num": 220,
+    "sent_at": "2026-02-24 18:36",
+    "sender": "אבו",
+    "is_valid": true,
+    "reason": "תקין",
+    "name": "איציק שקדסדסְ םב פ",
+    "phone": "+972522222582"
+  },
+  {
+    "msg_num": 221,
+    "sent_at": "2026-02-24 18:35",
+    "sender": "אבו",
+    "is_valid": false,
+    "reason": "כפילות (כבר הופיע בסריקה הזו)",
+    "name": "דוד ארד יבניאל",
+    "phone": "+972545602307"
+  },
+  {
+    "msg_num": 222,
+    "sent_at": "2026-02-24 18:26",
+    "sender": "H12543j",
+    "is_valid": false,
+    "reason": "לא איש קשר (EMPTY/SERVICE MESSAGE)",
+    "name": "",
+    "phone": ""
+  }
+]
