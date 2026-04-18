@@ -42,9 +42,6 @@ export default function RSVPForm({ id, name, initialStatus, initialGuests }: RSV
   };
 
   const generateICS = () => {
-    // Event times in UTC (Israel Summer Time is UTC+3)
-    // June 5, 2026, 20:00 IDT -> 17:00 UTC
-    // June 6, 2026, 00:00 IDT -> 21:00 UTC
     const title = "יום הולדת 80 לעמיר ז'ביליק 🚜";
     const description = `נשמח לראותכם! לפרטים ואישור הגעה: ${window.location.origin}${window.location.pathname}?id=${id}`;
     const location = "מוזיאון הטרקטור בעין ורד";
@@ -62,10 +59,11 @@ export default function RSVPForm({ id, name, initialStatus, initialGuests }: RSV
       `LOCATION:${location}`,
       "END:VEVENT",
       "END:VCALENDAR"
-    ].join("\n");
+    ].join("\r\n");
 
-    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
-    return URL.createObjectURL(blob);
+    if (typeof window === 'undefined') return '#';
+    const base64 = btoa(unescape(encodeURIComponent(icsContent)));
+    return `data:text/calendar;base64,${base64}`;
   };
 
   return (
@@ -91,9 +89,9 @@ export default function RSVPForm({ id, name, initialStatus, initialGuests }: RSV
             </div>
             <div className="text-right">
               <p className="font-bold text-lg">יום ו', 5 ביוני 2026</p>
-              <div className="text-sm text-slate-500 font-medium leading-tight mt-1">
+              <div className="text-sm text-slate-500 font-medium leading-relaxed mt-1">
                 <p>התכנסות החל מהשעה 20:00</p>
-                <p>תחילת מסיבה בשעה 21:00</p>
+                <p className="text-purple-600 font-bold">תחילת מסיבה בשעה 21:00</p>
               </div>
             </div>
           </div>
@@ -103,24 +101,23 @@ export default function RSVPForm({ id, name, initialStatus, initialGuests }: RSV
             </div>
             <div className="text-right flex-1">
               <p className="font-bold text-lg">מוזיאון הטרקטור במושב עין ורד</p>
-              <div className="flex items-center gap-2 mt-1">
-                <p className="text-xs text-slate-500 font-medium italic">הזמנה אישית/זוגית ולא ניתנת להעברה</p>
+              <div className="flex flex-wrap justify-center gap-3 mt-4">
                 <a 
                   href="https://waze.com/ul?q=מוזיאון%20הטרקטור%20בשדה%20ורד" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#33CCFF] text-white text-[11px] font-bold rounded-full hover:shadow-lg hover:bg-[#2bb8e6] transition-all active:scale-95"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-[#33CCFF] text-white text-xs font-bold rounded-full hover:shadow-lg transition-all active:scale-95"
                 >
-                  ניווט ליעד
-                  <img src="https://pngimg.com/uploads/waze/waze_PNG40.png" className="w-4 h-4" alt="Waze" />
+                  <img src="https://pngimg.com/uploads/waze/waze_PNG40.png" className="w-5 h-5 order-first" alt="Waze" />
+                  <span>ניווט ליעד</span>
                 </a>
                 <a 
-                  href={typeof window !== 'undefined' ? generateICS() : '#'}
+                  href={generateICS()}
                   download="amir-birthday-80.ics"
-                  className="inline-flex items-center gap-1.5 px-3 py-1 bg-green-600 text-white text-[11px] font-bold rounded-full hover:shadow-lg hover:bg-green-700 transition-all active:scale-95"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white text-xs font-bold rounded-full hover:shadow-lg transition-all active:scale-95"
                 >
-                  הוספה ליומן
-                  <BellPlus className="w-3.5 h-3.5" />
+                  <BellPlus className="w-4 h-4 order-first" />
+                  <span>הוספה ליומן</span>
                 </a>
               </div>
             </div>
