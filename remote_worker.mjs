@@ -11,6 +11,7 @@ dotenv.config({ path: '.env.local' });
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
   console.error('❌ Missing Supabase credentials in .env.local');
@@ -18,17 +19,19 @@ if (!supabaseUrl || !supabaseKey) {
 }
 
 const supabase = createClient(supabaseUrl, supabaseKey);
+const supabaseAdmin = supabaseServiceKey ? createClient(supabaseUrl, supabaseServiceKey) : supabase;
 
 // ─── Log to both console and Supabase ─────────────────────────────────────────
 async function log(message, level = 'info') {
   const timestamp = new Date().toLocaleTimeString('he-IL');
   console.log(`[${timestamp}] ${message}`);
-  await supabase.from('system_logs').insert([{ message, level }]);
+  // Use admin client for logging to bypass RLS
+  await supabaseAdmin.from('system_logs').insert([{ message, level }]);
 }
 
 // ─── Update heartbeat in system_settings ──────────────────────────────────────
 async function updateHeartbeat(status = 'online') {
-  await supabase.from('system_settings').upsert([
+  await supabaseAdmin.from('system_settings').upsert([
     {
       key: 'worker_heartbeat',
       value: { status, last_seen: new Date().toISOString() },
@@ -72,10 +75,11 @@ async function processBulkSend(job) {
   await supabase.from('jobs').update({ status: 'processing' }).eq('id', job.id);
 
   try {
-    const { data: guests, error } = await supabase
+    const { data: guests, error } = await supabaseAdmin
       .from('guests')
       .select('*')
-      .eq('status', targetStatus);
+      .eq('status', targetStatus)
+      .neq('status', 'deleted');
 
     if (error) throw error;
 
@@ -132,7 +136,7 @@ async function processBulkSend(job) {
 // ─── Process a telegram_sync job ──────────────────────────────────────────────
 async function processTelegramSync(job) {
   await log(`🔄 מתחיל סנכרון מטלגרם...`, 'info');
-  await supabase.from('jobs').update({ status: 'processing' }).eq('id', job.id);
+  await supabaseAdmin.from('jobs').update({ status: 'processing' }).eq('id', job.id);
 
   try {
     // Run the script using the local virtual environment
@@ -151,9 +155,42 @@ async function processTelegramSync(job) {
   }
 }
 
+// ─── Process a delete_guest job ────────────────────────────────────────────────
+async function processDeleteGuest(job) {
+  const { id: guestId, name: guestName } = job.payload || {};
+
+  await log(`🚀 [SERVER] פקודת מחיקה התקבלה עבור: ${guestName || 'לא ידוע'}`, 'info');
+  await supabaseAdmin.from('jobs').update({ status: 'processing' }).eq('id', job.id);
+
+  try {
+    if (!guestId) throw new Error('מזהה ה-ID של האורח חסר!');
+
+    await log(`⚡ [SERVER] מבצע מחיקה לצמיתות מהמסד...`, 'info');
+
+    const { data, error } = await supabaseAdmin
+      .from('guests')
+      .delete()
+      .eq('id', guestId)
+      .select(); // returns deleted rows
+
+    if (error) throw new Error(`PostgreSQL error: ${error.message}`);
+
+    if (!data || data.length === 0) {
+      await log(`⚠️ [SERVER] האורח לא נמצא – כנראה נמחק כבר.`, 'info');
+    } else {
+      await log(`✅ [SERVER] ${guestName || data[0]?.name || 'האורח'} נמחק בהצלחה!`, 'success');
+    }
+
+    await supabaseAdmin.from('jobs').update({ status: 'completed' }).eq('id', job.id);
+  } catch (err) {
+    await log(`❌ [SERVER] כשל במחיקה: ${err.message}`, 'error');
+    await supabaseAdmin.from('jobs').update({ status: 'failed' }).eq('id', job.id);
+  }
+}
+
 // ─── Realtime Job Listener ─────────────────────────────────────────────────────
 function subscribeToJobs() {
-  supabase
+  supabaseAdmin
     .channel('jobs-listener')
     .on(
       'postgres_changes',
@@ -169,6 +206,8 @@ function subscribeToJobs() {
             await processBulkSend(job);
           } else if (job.type === 'telegram_sync') {
             await processTelegramSync(job);
+          } else if (job.type === 'delete_guest') {
+            await processDeleteGuest(job);
           }
         }
       }
@@ -193,7 +232,7 @@ setInterval(() => updateHeartbeat('online'), 30000);
 
 // ─── Fallback: Poll for missed pending jobs every 60 seconds ──────────────────
 setInterval(async () => {
-  const { data: pendingJobs } = await supabase
+  const { data: pendingJobs } = await supabaseAdmin
     .from('jobs')
     .select('*')
     .eq('status', 'pending');
@@ -205,6 +244,8 @@ setInterval(async () => {
         await processBulkSend(job);
       } else if (job.type === 'telegram_sync') {
         await processTelegramSync(job);
+      } else if (job.type === 'delete_guest') {
+        await processDeleteGuest(job);
       }
     }
   }

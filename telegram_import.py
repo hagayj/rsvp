@@ -12,7 +12,7 @@ load_dotenv('.env.local')
 
 API_ID   = os.environ.get('TELEGRAM_API_ID')
 API_HASH = os.environ.get('TELEGRAM_API_HASH')
-GROUP_NAME = "הפנינג בר מצווה חגי" # Change this to your group name
+GROUP_NAME = os.environ.get('TELEGRAM_GROUP_NAME', 'הזמנות לחתונה') # Default to a generic name
 INSERT_TO_DB = "--insert" in sys.argv
 
 SUPABASE_URL = os.environ.get('NEXT_PUBLIC_SUPABASE_URL')

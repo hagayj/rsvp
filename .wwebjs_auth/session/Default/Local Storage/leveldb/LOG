@@ -1,3 +1,6 @@
 2026/04/18-23:06:10.145 489519 Reusing MANIFEST /Users/hagay/approvel/rsvp-app/.wwebjs_auth/session/Default/Local Storage/leveldb/MANIFEST-000001
 2026/04/18-23:06:10.157 489519 Recovering log #3
 2026/04/18-23:06:10.158 489519 Reusing old log /Users/hagay/approvel/rsvp-app/.wwebjs_auth/session/Default/Local Storage/leveldb/000003.log 
+2026/04/19-17:16:18.256 489519 Level-0 table #5: started
+2026/04/19-17:16:18.270 489519 Level-0 table #5: 11552 bytes OK
+2026/04/19-17:16:18.280 489519 Delete type=0 #3
