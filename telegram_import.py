@@ -1,64 +1,56 @@
-"""
-telegram_import.py
-------------------
-Extracts contacts from a specific Telegram group.
-Processes ALL messages and reports what was/wasn't parsed as a contact.
-
-Usage:
-  python3 telegram_import.py           → Preview only (no DB writes)
-  python3 telegram_import.py --insert  → Insert into Supabase (skips duplicates by phone)
-"""
-
-import asyncio
-import re
+import os
 import sys
 import json
+import asyncio
+from datetime import datetime
 from telethon import TelegramClient
-from telethon.tl.types import (
-    MessageMediaContact, MessageMediaPhoto, MessageMediaDocument,
-    MessageMediaWebPage
-)
+from telethon.tl.types import MessageMediaContact, MessageMediaDocument, MessageMediaPhoto, MessageMediaGeo, MessageMediaWebPage, MessageMediaVenue
+from dotenv import load_dotenv
 
-# ─── Config ───────────────────────────────────────────────────────────────────
-API_ID    = 23087482
-API_HASH  = "f7a811f17dcd96fae7d6095766388e90"
-GROUP_NAME = "https://t.me/+8w0T2s__ceVlOGJk"
+# Load config
+load_dotenv('.env.local')
 
-SUPABASE_URL = "https://bvlcfqoxlfmxbxpkuuhg.supabase.co"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2bGNmcW94bGZteGJ4cGt1dWhnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NTE0NjMsImV4cCI6MjA5MTIyNzQ2M30.2TMk-UslCOFFWEpwKV4U1ZYIPJb_gH0qGdmzDBhQw_0"
-
+API_ID   = os.environ.get('TELEGRAM_API_ID')
+API_HASH = os.environ.get('TELEGRAM_API_HASH')
+GROUP_NAME = "הפנינג בר מצווה חגי" # Change this to your group name
 INSERT_TO_DB = "--insert" in sys.argv
 
+SUPABASE_URL = os.environ.get('NEXT_PUBLIC_SUPABASE_URL')
+SUPABASE_KEY = os.environ.get('NEXT_PUBLIC_SUPABASE_ANON_KEY')
+
+# ─── Progress Logging ────────────────────────────────────────────────────────
+def log_to_db(message, level='info'):
+    print(f"[{level.upper()}] {message}")
+    try:
+        from supabase import create_client
+        sb = create_client(SUPABASE_URL, SUPABASE_KEY)
+        sb.table('system_logs').insert({
+            'message': message,
+            'level': level
+        }).execute()
+    except Exception as e:
+        print(f"Failed to log to DB: {e}")
+
 # ─── Helpers ──────────────────────────────────────────────────────────────────
-import random, string
-
-def make_code(name, phone):
-    suffix = ''.join(random.choices(string.ascii_lowercase + string.digits, k=5))
-    clean = re.sub(r'[^a-zA-Z\u05d0-\u05ea]', '', name)[:8].lower()
-    return f"{clean}-{suffix}"
-
-def normalize_phone(phone: str) -> str:
-    """Returns phone in format +972XXXXXXXXX"""
-    p = re.sub(r'[^\d+]', '', phone)
-    if p.startswith('+972'):  return p
-    if p.startswith('972'):   return '+' + p
-    if p.startswith('0'):     return '+972' + p[1:]
+def normalize_phone(phone):
+    if not phone: return ""
+    p = "".join(filter(str.isdigit, str(phone)))
+    if p.startswith('05'): p = '972' + p[1:]
+    if len(p) == 9 and p.startswith('5'): p = '972' + p
     return p
 
-def describe_message(message) -> str:
-    """Returns a human-readable description of what a message contains."""
-    if message.text:
-        preview = message.text[:60].replace('\n', ' ')
-        return f"TEXT: \"{preview}{'...' if len(message.text) > 60 else ''}\""
-    if isinstance(message.media, MessageMediaPhoto):
-        return "PHOTO"
-    if isinstance(message.media, MessageMediaDocument):
-        return "DOCUMENT/FILE"
-    if isinstance(message.media, MessageMediaWebPage):
-        return "WEB LINK"
-    if message.media:
-        return f"OTHER MEDIA: {type(message.media).__name__}"
-    return "EMPTY/SERVICE MESSAGE"
+def make_code(name, phone):
+    import hashlib
+    seed = f"{name}{phone}rsvp2024"
+    return hashlib.md5(seed.encode()).hexdigest()[:8].upper()
+
+def describe_message(message):
+    if not message.media: return "TEXT MESSAGE"
+    if isinstance(message.media, MessageMediaContact): return "CONTACT CARD"
+    if isinstance(message.media, MessageMediaPhoto): return "PHOTO"
+    if isinstance(message.media, MessageMediaDocument): return "DOCUMENT/FILE"
+    if isinstance(message.media, MessageMediaWebPage): return "WEB LINK"
+    return f"MEDIA: {type(message.media).__name__}"
 
 # ─── DB Helpers ───────────────────────────────────────────────────────────────
 def get_supabase():
@@ -66,115 +58,114 @@ def get_supabase():
         from supabase import create_client
         return create_client(SUPABASE_URL, SUPABASE_KEY)
     except ImportError:
-        print("⚠️  supabase-py not installed. Run: pip3 install supabase")
+        print("⚠️  supabase-py not installed.")
         return None
 
-async def is_duplicate_in_db(sb, phone):
-    if not sb: return False
-    existing = sb.table('guests').select('id').eq('phone', phone).execute()
-    return len(existing.data) > 0
+async def get_existing_phones(sb):
+    """Fetch all existing phones in ONE query."""
+    if not sb: return set()
+    try:
+        res = sb.table('guests').select('phone').execute()
+        return {str(r['phone']) for r in res.data if r.get('phone')}
+    except Exception as e:
+        log_to_db(f"Error fetching existing phones: {e}", "error")
+        return set()
 
-async def insert_to_supabase(contacts):
-    sb = get_supabase()
+async def insert_to_supabase(contacts, sb):
     if not sb: return
 
-    print("\n" + "="*60)
-    print("INSERTING NEW CONTACTS INTO SUPABASE...")
-    print("="*60)
+    log_to_db("📥 מתחיל הכנסת אנשי קשר חדשים למסד הנתונים...", "info")
 
     inserted = 0
     skipped  = 0
+    
+    # Re-fetch just in case something changed during scan
+    existing_phones = await get_existing_phones(sb)
 
     for c in contacts:
         if not c.get('is_valid'):
             continue
             
         phone = c['phone']
-        if await is_duplicate_in_db(sb, phone):
-            print(f"  [SKIP]   {c['name']:<30} {phone}  → already in DB")
+        if phone in existing_phones:
             skipped += 1
             continue
 
-        sb.table('guests').insert({
-            'name':        c['name'],
-            'phone':       phone,
-            'status':      'pending',
-            'unique_code': make_code(c['name'], phone),
-            'added_by':    c.get('sender', 'Telegram Import'),
-            'is_approved': False
-        }).execute()
+        try:
+            sb.table('guests').insert({
+                'name':        c['name'],
+                'phone':       phone,
+                'status':      'pending',
+                'unique_code': make_code(c['name'], phone),
+                'added_by':    c.get('sender', 'Telegram Import'),
+                'is_approved': False
+            }).execute()
+            inserted += 1
+            existing_phones.add(phone)
+        except Exception as e:
+            print(f"Error inserting {phone}: {e}")
 
-        print(f"  [INSERT] {c['name']:<30} {phone}  → added ✅")
-        inserted += 1
-
-    print(f"\n{'='*60}")
-    summary = f"סנכרון טלגרם הושלם: {inserted} נוספו, {skipped} דולגו (כבר קיימים)."
-    print(summary)
-    print(f"{'='*60}")
-    
-    if sb:
-        sb.table('system_logs').insert({
-            'message': summary,
-            'level': 'success'
-        }).execute()
+    summary = f"✅ סנכרון הושלם: {inserted} נוספו, {skipped} דולגו (כבר קיימים)."
+    log_to_db(summary, "success")
 
 # ─── Main ─────────────────────────────────────────────────────────────────────
 async def main():
     if not API_ID or not API_HASH:
-        print("ERROR: Please fill API_ID and API_HASH in the script.")
+        log_to_db("ERROR: TELEGRAM_API_ID or TELEGRAM_API_HASH is missing!", "error")
         return
 
-    print(f"Connecting to Telegram...")
+    log_to_db("🔵 מתחיל סריקה בטלגרם...")
 
-    async with TelegramClient('rsvp_session', API_ID, API_HASH) as client:
-        print("Connected! ✅")
+    sb = get_supabase()
+    if not sb:
+        log_to_db("ERROR: Could not connect to Supabase", "error")
+        return
 
-        # If no GROUP_NAME, list all chats and exit
-        if not GROUP_NAME:
-            print("\nAvailable chats:")
-            async for dialog in client.iter_dialogs():
-                print(f"  - {dialog.name}")
-            print("\nFill GROUP_NAME and run again.")
-            return
+    # STEP 1: Fetch existing phones once
+    log_to_db("🔍 טוען רשימת מוזמנים קיימת מהמסד...")
+    existing_phones = await get_existing_phones(sb)
+    log_to_db(f"📊 נמצאו {len(existing_phones)} מוזמנים קיימים.")
+
+    async with TelegramClient('rsvp_session', int(API_ID), API_HASH) as client:
+        log_to_db("🟢 מחובר לטלגרם!")
 
         # ─── Find the group ───────────────────────────────────────────────────
-        print(f"\nLooking for group: '{GROUP_NAME}'...")
         target_group = None
-
         try:
             target_group = await client.get_entity(GROUP_NAME)
-            print(f"  Group found: {getattr(target_group, 'title', GROUP_NAME)} ✅")
         except Exception:
             async for dialog in client.iter_dialogs():
                 if GROUP_NAME.lower() in dialog.name.lower():
                     target_group = dialog.entity
-                    print(f"  Group found: {dialog.name} ✅")
                     break
 
         if not target_group:
-            print(f"  ERROR: Group not found: '{GROUP_NAME}'")
+            log_to_db(f"❌ שגיאה: הקבוצה '{GROUP_NAME}' לא נמצאה!", "error")
             return
 
+        log_to_db(f"📍 מצאתי את הקבוצה: {getattr(target_group, 'title', GROUP_NAME)}")
+
         # ─── Scan all messages ────────────────────────────────────────────────
-        print(f"\nScanning ALL messages (up to 10,000)...")
-        print("="*60)
+        log_to_db(f"🔄 סורק הודעות (עד 10,000)...")
 
         results = []
         seen_phones_session = set()
-        sb = get_supabase()
         msg_num = 0
+        valid_found = 0
 
         async for message in client.iter_messages(target_group, limit=10000):
             msg_num += 1
-            date_str = message.date.strftime('%Y-%m-%d %H:%M') if message.date else ''
-            sender = getattr(message.sender, 'first_name', '') or ''
+            
+            # Progress reporting every 1000 msgs
+            if msg_num % 1000 == 0:
+                log_to_db(f"⏳ סורק... (בוצע: {msg_num}/10000, נמצאו: {valid_found})")
+
+            sender = getattr(message.sender, 'first_name', '') or 'אנונימי'
             
             entry = {
                 "msg_num": msg_num,
-                "sent_at": date_str,
                 "sender": sender,
                 "is_valid": False,
-                "reason": "",
                 "name": "",
                 "phone": ""
             }
@@ -182,63 +173,29 @@ async def main():
             if message.media and isinstance(message.media, MessageMediaContact):
                 mc = message.media
                 name_parts = [mc.first_name or '', mc.last_name or '']
-                name = ' '.join(p for p in name_parts if p).strip() or f"Contact {mc.phone_number}"
+                name = ' '.join(p for p in name_parts if p).strip() or f"איש קשר {mc.phone_number}"
                 phone = normalize_phone(mc.phone_number)
                 
-                entry["name"] = name
-                entry["phone"] = phone
-
-                # Check for duplicates
-                if phone in seen_phones_session:
-                    entry["reason"] = f"כפילות (כבר הופיע בסריקה הזו)"
-                    print(f"  [MSG #{msg_num:3}] {date_str} | ❌ {name} {phone} (Session Duplicate)")
-                elif await is_duplicate_in_db(sb, phone):
-                    entry["reason"] = f"כפילות (כבר קיים במסד הנתונים)"
-                    seen_phones_session.add(phone) # Mark as seen to avoid re-checking DB
-                    print(f"  [MSG #{msg_num:3}] {date_str} | ❌ {name} {phone} (DB Duplicate)")
+                # Check for duplicates using the PRE-FETCHED set
+                if phone in seen_phones_session or phone in existing_phones:
+                    # Skip duplicates
+                    pass
                 else:
                     entry["is_valid"] = True
-                    entry["reason"] = "תקין"
+                    entry["name"] = name
+                    entry["phone"] = phone
                     seen_phones_session.add(phone)
-                    print(f"  [MSG #{msg_num:3}] {date_str} | ✅ {name:<28} {phone}")
-            else:
-                desc = describe_message(message)
-                entry["reason"] = f"לא איש קשר ({desc})"
-                print(f"  [MSG #{msg_num:3}] {date_str} | ⚠️  {desc}")
+                    valid_found += 1
             
             results.append(entry)
 
-        # ─── Summary ──────────────────────────────────────────────────────────
-        valid_contacts = [r for r in results if r['is_valid']]
-        print(f"\n{'='*60}")
-        print(f"SCAN COMPLETE")
-        print(f"  Total messages scanned : {msg_num}")
-        print(f"  Valid new contacts     : {len(valid_contacts)}")
-        print(f"  Duplicates/Non-contact : {msg_num - len(valid_contacts)}")
-        print(f"{'='*60}")
-
-        print(f"\nTOP 20 SCAN RESULTS (See full JSON for all):")
-        print(f"{'='*60}")
-        print(f"{'#':<4} | {'Time':<16} | {'Valid?':<6} | {'Reason/Name'}")
-        print(f"-"*60)
-        for r in results[:20]:
-            status_char = "✅" if r['is_valid'] else "❌"
-            content = r['name'] if r['is_valid'] else r['reason']
-            print(f"{r['msg_num']:<4} | {r['sent_at']:<16} | {status_char:<6} | {content}")
-        print(f"{'='*60}")
-
-        # Save to JSON
-        with open('contacts_import.json', 'w', encoding='utf-8') as f:
-            json.dump(results, f, ensure_ascii=False, indent=2)
-        print(f"\nSaved to: contacts_import.json")
-
+        log_to_db(f"🏁 הסריקה הסתיימה. נסרקו {msg_num} הודעות.")
+        
         # ─── DB Insert ────────────────────────────────────────────────────────
         if INSERT_TO_DB:
-            await insert_to_supabase(results)
+            await insert_to_supabase(results, sb)
         else:
-            print(f"\nPREVIEW MODE - nothing was written to DB.")
-            print(f"To insert into Supabase, run:")
-            print(f"  python3 telegram_import.py --insert")
+            log_to_db(f"⚠️ מצב תצוגה מקדימה: נמצאו {valid_found} חדשים (לא הוכנסו למסד)")
 
 
 if __name__ == '__main__':

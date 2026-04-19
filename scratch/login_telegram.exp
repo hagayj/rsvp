@@ -1,0 +1,9 @@
+#!/usr/bin/expect -f
+set timeout 60
+spawn ssh -o StrictHostKeyChecking=no hagay@192.168.0.240 "cd /home/hagay/Desktop/rsvp-worker/ && ./venv/bin/python3 telegram_import.py --insert"
+expect "assword:"
+send "12322123\r"
+expect "phone (or bot token):"
+send "972509505548\r"
+expect "code:"
+interact

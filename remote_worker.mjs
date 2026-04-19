@@ -152,31 +152,41 @@ async function processTelegramSync(job) {
 }
 
 // ─── Realtime Job Listener ─────────────────────────────────────────────────────
-supabase
-  .channel('jobs-listener')
-  .on(
-    'postgres_changes',
-    {
-      event: 'INSERT',
-      schema: 'public',
-      table: 'jobs',
-    },
-    async (payload) => {
-      const job = payload.new;
-      if (job.status === 'pending') {
-        if (job.type === 'bulk_send') {
-          await processBulkSend(job);
-        } else if (job.type === 'telegram_sync') {
-          await processTelegramSync(job);
+function subscribeToJobs() {
+  supabase
+    .channel('jobs-listener')
+    .on(
+      'postgres_changes',
+      {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'jobs',
+      },
+      async (payload) => {
+        const job = payload.new;
+        if (job.status === 'pending') {
+          if (job.type === 'bulk_send') {
+            await processBulkSend(job);
+          } else if (job.type === 'telegram_sync') {
+            await processTelegramSync(job);
+          }
         }
       }
-    }
-  )
-  .subscribe(async (status) => {
-    if (status === 'SUBSCRIBED') {
-      await log('📡 מחובר לערוץ הפקודות. מחכה לפקודות מהאתר...', 'info');
-    }
-  });
+    )
+    .subscribe(async (status) => {
+      if (status === 'SUBSCRIBED') {
+        await log('📡 מחובר לערוץ הפקודות. מחכה לפקודות מהאתר...', 'info');
+      } else {
+        await log(`🔔 סטטוס חיבור Realtime: ${status}`, 'info');
+        if (status === 'TIMED_OUT' || status === 'CLOSED') {
+          await log('🔄 מנסה להתחבר מחדש ל-Realtime בעוד 10 שניות...', 'info');
+          setTimeout(subscribeToJobs, 10000);
+        }
+      }
+    });
+}
+
+subscribeToJobs();
 
 // ─── Heartbeat every 30 seconds ───────────────────────────────────────────────
 setInterval(() => updateHeartbeat('online'), 30000);
@@ -186,8 +196,7 @@ setInterval(async () => {
   const { data: pendingJobs } = await supabase
     .from('jobs')
     .select('*')
-    .eq('status', 'pending')
-    .eq('type', 'bulk_send');
+    .eq('status', 'pending');
 
   if (pendingJobs && pendingJobs.length > 0) {
     console.log(`🔍 נמצאו ${pendingJobs.length} פקודות שלא טופלו, מעבד...`);

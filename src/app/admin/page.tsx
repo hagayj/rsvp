@@ -8,7 +8,7 @@ interface Guest {
   id: string;
   name: string;
   phone: string;
-  status: 'pending' | 'attending' | 'declined';
+  status: 'pending' | 'attending' | 'declined' | 'deleted';
   guests_count: number;
   unique_code: string;
   updated_at: string;
@@ -212,13 +212,21 @@ export default function AdminPage() {
 
   const handleDeleteGuest = async (id: string) => {
     if (!confirm('האם אתה בטוח שברצונך למחוק את האורח?')) return;
-    const { error } = await supabase.from('guests').delete().eq('id', id);
-    if (!error) fetchGuests();
+    const { error } = await supabase.from('guests').update({ status: 'deleted' }).eq('id', id);
+    if (!error) {
+      fetchGuests();
+    } else {
+      alert('שגיאה במחיקה: ' + error.message);
+    }
   };
 
   const handleApproveGuest = async (id: string) => {
     const { error } = await supabase.from('guests').update({ is_approved: true }).eq('id', id);
-    if (!error) fetchGuests();
+    if (!error) {
+      fetchGuests();
+    } else {
+      alert('שגיאה באישור: ' + error.message);
+    }
   };
 
   const handleAddManualGuest = async (e: React.FormEvent) => {
@@ -255,7 +263,10 @@ export default function AdminPage() {
   const totalAttendingInvites = guests.filter(g => g.status === 'attending').length;
   const totalDeclined = guests.filter(g => g.status === 'declined').length;
   const totalPending = guests.filter(g => g.status === 'pending').length;
-  const filteredGuests = (filter === 'all' ? guests : guests.filter(g => g.status === filter))
+  
+  const filteredGuests = guests
+    .filter(g => g.status !== 'deleted') // Soft-delete filter
+    .filter(g => filter === 'all' ? true : g.status === filter)
     .sort((a, b) => b.is_approved === a.is_approved ? 0 : a.is_approved ? 1 : -1);
 
   const getLogColor = (level: string) => {
