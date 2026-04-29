@@ -325,14 +325,6 @@ export default function AdminContent() {
     }
   };
 
-  const handleApproveGuest = async (id: string) => {
-    const { error } = await supabase.from('guests').update({ is_approved: true }).eq('id', id);
-    if (!error) {
-      fetchGuests();
-    } else {
-      alert('שגיאה באישור: ' + error.message);
-    }
-  };
 
   const handleAddManualGuest = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -348,7 +340,6 @@ export default function AdminContent() {
       name: manualName,
       phone: phone,
       added_by: 'מנהל (ידני)',
-      is_approved: true,
       status: 'pending',
       unique_code
     }]);
@@ -381,8 +372,7 @@ export default function AdminContent() {
       const nameMatch = (g.name || '').toLowerCase().includes(nameSearch.toLowerCase());
       const addedByMatch = (g.added_by || 'מערכת').toLowerCase().includes(addedBySearch.toLowerCase());
       return nameMatch && addedByMatch;
-    })
-    .sort((a, b) => b.is_approved === a.is_approved ? 0 : a.is_approved ? 1 : -1);
+    });
 
   const getLogColor = (level: string) => {
     if (level === 'success') return 'text-green-400';
@@ -685,7 +675,6 @@ export default function AdminContent() {
                   <th className="p-4 text-center">כמות</th>
                   <th className="p-4">סטטוס</th>
                   <th className="p-4">נשלח בשעה</th>
-                  <th className="p-4 text-center">אישור</th>
                   <th className="p-4">פעולות</th>
                 </tr>
               </thead>
@@ -696,10 +685,8 @@ export default function AdminContent() {
                   <tr><td colSpan={7} className="p-8 text-center text-slate-400">אין אורחים שתואמים לסינון.</td></tr>
                 ) : (
                   filteredGuests.map(guest => (
-                    <tr key={guest.id} className={`hover:bg-slate-50/50 transition ${!guest.is_approved ? 'bg-amber-50/50' : ''}`}>
                       <td className="p-4">
                         <div className="font-bold text-slate-800">{guest.name}</div>
-                        {!guest.is_approved && <span className="text-[10px] bg-amber-500 text-white px-1.5 py-0.5 rounded font-bold">ממתין לאישור</span>}
                       </td>
                       <td className="p-4 text-slate-600 font-mono text-right" style={{direction: 'ltr'}}>{guest.phone}</td>
                       <td className="p-4 text-slate-500 text-sm">{guest.added_by || 'מערכת'}</td>
@@ -715,13 +702,6 @@ export default function AdminContent() {
                       </td>
                       <td className="p-4 text-slate-500 text-xs font-mono">
                         {guest.last_reminder_at ? new Date(guest.last_reminder_at).toLocaleString('he-IL', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' }) : '-'}
-                      </td>
-                      <td className="p-4 text-center">
-                        {!guest.is_approved ? (
-                          <button onClick={() => handleApproveGuest(guest.id)} className="p-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition"><CheckCircle2 className="w-5 h-5" /></button>
-                        ) : (
-                          <div className="text-green-500 flex justify-center"><CheckCircle2 className="w-5 h-5" /></div>
-                        )}
                       </td>
                       <td className="p-4">
                         <div className="flex items-center gap-2">
