@@ -418,7 +418,7 @@ export default function AdminContent() {
         {/* Header Actions & Status */}
         <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
           <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-            <h1 className="text-3xl font-bold text-slate-800">פאנל ניהול מוזמנים</h1>
+            <h1 className="text-3xl font-bold text-slate-800">פאנל ניהול מוזמנים.</h1>
             <div className="flex flex-wrap items-center gap-3">
               <button 
                 onClick={handleTriggerTelegramSync}
