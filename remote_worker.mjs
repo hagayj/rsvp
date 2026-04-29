@@ -139,8 +139,15 @@ async function processBulkSend(job) {
         await log(`✅ נשלח בהצלחה ל-${guest.name}!`, 'success');
         successCount++;
       } catch (sendError) {
-        await log(`❌ שגיאה בשליחה ל-${guest.name}: ${sendError.message}`, 'error');
+        const errorMsg = sendError.message || 'שגיאה לא ידועה';
+        await log(`❌ נכשל ל-${guest.name}: ${errorMsg}`, 'error');
         failCount++;
+
+        // If the browser frame detached, wait and try to continue or alert
+        if (errorMsg.includes('detached Frame') || errorMsg.includes('Execution context was destroyed')) {
+          await log(`🔄 תקלת דפדפן (Frame Detached). ממתין 10 שניות...`, 'warning');
+          await new Promise(r => setTimeout(r, 10000));
+        }
       }
 
       const delay = Math.floor(Math.random() * 5000) + 5000;
