@@ -685,6 +685,7 @@ export default function AdminContent() {
                   <tr><td colSpan={7} className="p-8 text-center text-slate-400">אין אורחים שתואמים לסינון.</td></tr>
                 ) : (
                   filteredGuests.map(guest => (
+                    <tr key={guest.id} className="hover:bg-slate-50/50 transition">
                       <td className="p-4">
                         <div className="font-bold text-slate-800">{guest.name}</div>
                       </td>
