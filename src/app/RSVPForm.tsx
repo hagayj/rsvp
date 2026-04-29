@@ -85,9 +85,18 @@ export default function RSVPForm({ id, name, initialStatus, initialGuests }: RSV
 
           <div className="flex flex-col gap-3 mt-2">
             <a 
-              href="https://waze.com/ul?q=מוזיאון%20הטרקטור%20בשדה%20ורד" 
-              target="_blank" 
-              rel="noopener noreferrer"
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                const query = 'מוזיאון הטרקטור בעין ורד';
+                const universalUrl = `https://waze.com/ul?q=${encodeURIComponent(query)}`;
+                const androidIntentUrl = `intent://waze.com/ul?q=${encodeURIComponent(query)}#Intent;scheme=https;package=com.waze;end`;
+                if (/Android/i.test(navigator.userAgent)) {
+                  window.location.href = androidIntentUrl;
+                } else {
+                  window.location.href = universalUrl;
+                }
+              }}
               className="flex items-center justify-center gap-3 w-full py-4 bg-[#33CCFF] text-white text-base font-bold rounded-2xl shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
             >
               <span>ניווט בוויז</span>

@@ -21,23 +21,37 @@ if (!supabaseUrl || !supabaseKey) {
 const supabase = createClient(supabaseUrl, supabaseKey);
 const supabaseAdmin = supabaseServiceKey ? createClient(supabaseUrl, supabaseServiceKey) : supabase;
 
+// Track if WhatsApp is actually ready
+let isClientReady = false;
+
 // ─── Log to both console and Supabase ─────────────────────────────────────────
 async function log(message, level = 'info') {
   const timestamp = new Date().toLocaleTimeString('he-IL');
-  console.log(`[${timestamp}] ${message}`);
-  // Use admin client for logging to bypass RLS
-  await supabaseAdmin.from('system_logs').insert([{ message, level }]);
+  const logMsg = `[${timestamp}] ${message}`;
+  console.log(logMsg);
+  
+  try {
+    // Use admin client for logging to bypass RLS
+    const { error } = await supabaseAdmin.from('system_logs').insert([{ message, level }]);
+    if (error) console.error(`⚠️ Failed to push log to Supabase: ${error.message}`);
+  } catch (err) {
+    console.error(`⚠️ Exception during Supabase logging: ${err.message}`);
+  }
 }
 
 // ─── Update heartbeat in system_settings ──────────────────────────────────────
 async function updateHeartbeat(status = 'online') {
-  await supabaseAdmin.from('system_settings').upsert([
-    {
-      key: 'worker_heartbeat',
-      value: { status, last_seen: new Date().toISOString() },
-      updated_at: new Date().toISOString()
-    }
-  ], { onConflict: 'key' });
+  try {
+    await supabaseAdmin.from('system_settings').upsert([
+      {
+        key: 'worker_heartbeat',
+        value: { status, last_seen: new Date().toISOString(), whatsapp_ready: isClientReady },
+        updated_at: new Date().toISOString()
+      }
+    ], { onConflict: 'key' });
+  } catch (err) {
+    console.error(`⚠️ Failed to update heartbeat: ${err.message}`);
+  }
 }
 
 // ─── WhatsApp Client ───────────────────────────────────────────────────────────
@@ -54,15 +68,18 @@ client.on('qr', (qr) => {
 });
 
 client.on('ready', async () => {
+  isClientReady = true;
   await log('✅ WhatsApp Worker מחובר ומוכן לפקודות!', 'success');
   await updateHeartbeat('online');
 });
 
 client.on('auth_failure', async (msg) => {
+  isClientReady = false;
   await log('❌ שגיאת אימות WhatsApp: ' + msg, 'error');
 });
 
 client.on('disconnected', async (reason) => {
+  isClientReady = false;
   await log('🔌 WhatsApp התנתק: ' + reason, 'error');
   await updateHeartbeat('offline');
 });
@@ -72,7 +89,14 @@ async function processBulkSend(job) {
   const targetStatus = job.payload?.targetStatus || 'pending';
   await log(`🚀 פקודת שליחה התקבלה! יעד: ${targetStatus}`, 'success');
 
-  await supabase.from('jobs').update({ status: 'processing' }).eq('id', job.id);
+  if (!isClientReady) {
+    await log(`⚠️ WhatsApp עדיין לא מוכן. המשימה תמתין עד להתחברות.`, 'warning');
+    // We don't mark as failed, we just let it stay in pending or processing?
+    // Actually, let's wait a bit or throw error to let the fallback catch it.
+    throw new Error('WhatsApp client not ready');
+  }
+
+  await supabaseAdmin.from('jobs').update({ status: 'processing' }).eq('id', job.id);
 
   try {
     const { data: guests, error } = await supabaseAdmin
@@ -99,7 +123,6 @@ async function processBulkSend(job) {
       }
 
       const phone = guest.phone.replace(/[^0-9]/g, '');
-      // Convert Israeli local number (0509...) to international format (972509...)
       const intlPhone = phone.startsWith('0') ? '972' + phone.slice(1) : phone;
       const chatId = `${intlPhone}@c.us`;
 
@@ -109,7 +132,7 @@ async function processBulkSend(job) {
         await client.sendMessage(chatId, message);
 
         const now = new Date().toISOString();
-        await supabase.from('guests').update({ last_reminder_at: now }).eq('id', guest.id);
+        await supabaseAdmin.from('guests').update({ last_reminder_at: now }).eq('id', guest.id);
 
         await log(`✅ נשלח בהצלחה ל-${guest.name}!`, 'success');
         successCount++;
@@ -118,18 +141,17 @@ async function processBulkSend(job) {
         failCount++;
       }
 
-      // Wait 5-10 seconds between messages to avoid spam detection
       const delay = Math.floor(Math.random() * 5000) + 5000;
       await log(`⏳ ממתין ${Math.round(delay / 1000)} שניות לפני ההודעה הבאה...`, 'info');
       await new Promise(r => setTimeout(r, delay));
     }
 
-    await supabase.from('jobs').update({ status: 'completed' }).eq('id', job.id);
+    await supabaseAdmin.from('jobs').update({ status: 'completed' }).eq('id', job.id);
     await log(`🏁 השליחה הסתיימה! הצלחות: ${successCount}, כשלונות: ${failCount}`, 'success');
 
   } catch (error) {
     await log(`❌ שגיאה כללית בביצוע המשימה: ${error.message}`, 'error');
-    await supabase.from('jobs').update({ status: 'failed' }).eq('id', job.id);
+    await supabaseAdmin.from('jobs').update({ status: 'failed' }).eq('id', job.id);
   }
 }
 
@@ -139,7 +161,6 @@ async function processTelegramSync(job) {
   await supabaseAdmin.from('jobs').update({ status: 'processing' }).eq('id', job.id);
 
   try {
-    // Run the script using the local virtual environment
     const { stdout, stderr } = await execAsync('./venv/bin/python3 telegram_import.py --insert');
     
     if (stderr) {
@@ -147,11 +168,11 @@ async function processTelegramSync(job) {
     }
     
     await log(`✅ סנכרון טלגרם הסתיים בהצלחה!`, 'success');
-    await supabase.from('jobs').update({ status: 'completed' }).eq('id', job.id);
+    await supabaseAdmin.from('jobs').update({ status: 'completed' }).eq('id', job.id);
     
   } catch (error) {
     await log(`❌ שגיאה בסנכרון טלגרם: ${error.message}`, 'error');
-    await supabase.from('jobs').update({ status: 'failed' }).eq('id', job.id);
+    await supabaseAdmin.from('jobs').update({ status: 'failed' }).eq('id', job.id);
   }
 }
 
@@ -171,7 +192,7 @@ async function processDeleteGuest(job) {
       .from('guests')
       .delete()
       .eq('id', guestId)
-      .select(); // returns deleted rows
+      .select();
 
     if (error) throw new Error(`PostgreSQL error: ${error.message}`);
 
@@ -202,12 +223,16 @@ function subscribeToJobs() {
       async (payload) => {
         const job = payload.new;
         if (job.status === 'pending') {
-          if (job.type === 'bulk_send') {
-            await processBulkSend(job);
-          } else if (job.type === 'telegram_sync') {
-            await processTelegramSync(job);
-          } else if (job.type === 'delete_guest') {
-            await processDeleteGuest(job);
+          try {
+            if (job.type === 'bulk_send') {
+              await processBulkSend(job);
+            } else if (job.type === 'telegram_sync') {
+              await processTelegramSync(job);
+            } else if (job.type === 'delete_guest') {
+              await processDeleteGuest(job);
+            }
+          } catch (err) {
+            console.error('Job processing error:', err.message);
           }
         }
       }
@@ -232,22 +257,30 @@ setInterval(() => updateHeartbeat('online'), 30000);
 
 // ─── Fallback: Poll for missed pending jobs every 60 seconds ──────────────────
 setInterval(async () => {
-  const { data: pendingJobs } = await supabaseAdmin
-    .from('jobs')
-    .select('*')
-    .eq('status', 'pending');
+  try {
+    const { data: pendingJobs } = await supabaseAdmin
+      .from('jobs')
+      .select('*')
+      .eq('status', 'pending');
 
-  if (pendingJobs && pendingJobs.length > 0) {
-    console.log(`🔍 נמצאו ${pendingJobs.length} פקודות שלא טופלו, מעבד...`);
-    for (const job of pendingJobs) {
-      if (job.type === 'bulk_send') {
-        await processBulkSend(job);
-      } else if (job.type === 'telegram_sync') {
-        await processTelegramSync(job);
-      } else if (job.type === 'delete_guest') {
-        await processDeleteGuest(job);
+    if (pendingJobs && pendingJobs.length > 0) {
+      console.log(`🔍 נמצאו ${pendingJobs.length} פקודות שלא טופלו, מעבד...`);
+      for (const job of pendingJobs) {
+        try {
+          if (job.type === 'bulk_send') {
+            await processBulkSend(job);
+          } else if (job.type === 'telegram_sync') {
+            await processTelegramSync(job);
+          } else if (job.type === 'delete_guest') {
+            await processDeleteGuest(job);
+          }
+        } catch (err) {
+          console.error(`Error processing polled job ${job.id}:`, err.message);
+        }
       }
     }
+  } catch (err) {
+    console.error('Error polling jobs:', err.message);
   }
 }, 60000);
 
