@@ -28,7 +28,7 @@ export default function AdminContent() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [guests, setGuests] = useState<Guest[]>([]);
-  const [filter, setFilter] = useState<'all' | 'attending' | 'declined' | 'pending'>('all');
+  const [filter, setFilter] = useState<'all' | 'attending' | 'declined' | 'pending' | 'not_invited'>('all');
   const [loading, setLoading] = useState(false);
   const [activeJobType, setActiveJobType] = useState<string | null>(null);
   const isTriggering = activeJobType !== null;
@@ -202,9 +202,19 @@ export default function AdminContent() {
     window.open(whatsappUrl, '_blank');
   };
 
-  const handleTriggerRemoteBulkSend = async (targetStatus: 'pending' | 'attending' | 'declined') => {
-    const count = guests.filter(g => g.status === targetStatus).length;
-    const labelMap = { pending: 'טרם ענו', attending: 'מגיעים', declined: 'לא מגיעים' };
+  const handleTriggerRemoteBulkSend = async (targetStatus: 'pending' | 'attending' | 'declined' | 'not_invited') => {
+    const count = targetStatus === 'not_invited' 
+      ? guests.filter(g => g.status === 'pending' && !g.last_reminder_at).length
+      : targetStatus === 'pending'
+      ? guests.filter(g => g.status === 'pending' && g.last_reminder_at).length
+      : guests.filter(g => g.status === targetStatus).length;
+
+    const labelMap = { 
+      pending: 'ממתינים לתשובה (נשלח)', 
+      not_invited: 'טרם הוזמנו',
+      attending: 'מגיעים', 
+      declined: 'לא מגיעים' 
+    };
 
     if (!workerOnline) {
       alert('המחשב בבית אינו מחובר! ודא שהסקריפט remote_worker.mjs רץ שם.');
@@ -356,11 +366,17 @@ export default function AdminContent() {
   const totalAttendingGuests = guests.filter(g => g.status === 'attending').reduce((sum, g) => sum + (g.guests_count || 1), 0);
   const totalAttendingInvites = guests.filter(g => g.status === 'attending').length;
   const totalDeclined = guests.filter(g => g.status === 'declined').length;
-  const totalPending = guests.filter(g => g.status === 'pending').length;
+  const totalPendingResponse = guests.filter(g => g.status === 'pending' && g.last_reminder_at).length;
+  const totalNotInvited = guests.filter(g => g.status === 'pending' && !g.last_reminder_at).length;
   
   const filteredGuests = guests
     .filter(g => g.status !== 'deleted')
-    .filter(g => filter === 'all' ? true : g.status === filter)
+    .filter(g => {
+      if (filter === 'all') return true;
+      if (filter === 'not_invited') return g.status === 'pending' && !g.last_reminder_at;
+      if (filter === 'pending') return g.status === 'pending' && g.last_reminder_at;
+      return g.status === filter;
+    })
     .filter(g => {
       const nameMatch = (g.name || '').toLowerCase().includes(nameSearch.toLowerCase());
       const addedByMatch = (g.added_by || 'מערכת').toLowerCase().includes(addedBySearch.toLowerCase());
@@ -515,8 +531,12 @@ export default function AdminContent() {
             <p className="text-3xl font-black text-red-900">{totalDeclined}</p>
           </div>
           <div className="bg-amber-50 p-4 rounded-2xl border border-amber-100">
-            <p className="text-amber-600 text-sm font-bold mb-1">טרם ענו</p>
-            <p className="text-3xl font-black text-amber-900">{totalPending}</p>
+            <p className="text-amber-600 text-sm font-bold mb-1">ממתינים לתשובה</p>
+            <p className="text-3xl font-black text-amber-900">{totalPendingResponse}</p>
+          </div>
+          <div className="bg-blue-50 p-4 rounded-2xl border border-blue-100">
+            <p className="text-blue-600 text-sm font-bold mb-1">טרם הוזמנו</p>
+            <p className="text-3xl font-black text-blue-900">{totalNotInvited}</p>
           </div>
         </div>
 
@@ -589,6 +609,7 @@ export default function AdminContent() {
               <button onClick={() => setFilter('attending')} className={`px-4 py-2 rounded-xl font-medium text-sm transition ${filter === 'attending' ? 'bg-green-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>מגיעים</button>
               <button onClick={() => setFilter('declined')} className={`px-4 py-2 rounded-xl font-medium text-sm transition ${filter === 'declined' ? 'bg-red-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>לא מגיעים</button>
               <button onClick={() => setFilter('pending')} className={`px-4 py-2 rounded-xl font-medium text-sm transition ${filter === 'pending' ? 'bg-amber-500 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>ממתינים לתשובה</button>
+              <button onClick={() => setFilter('not_invited')} className={`px-4 py-2 rounded-xl font-medium text-sm transition ${filter === 'not_invited' ? 'bg-blue-500 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>טרם הוזמנו</button>
             </div>
 
             {filter !== 'all' && filteredGuests.length > 0 && (() => {
@@ -598,11 +619,12 @@ export default function AdminContent() {
                 declined:  { bg: 'bg-red-50',    border: 'border-red-100',    icon: 'text-red-500',    btn: 'bg-red-500 hover:bg-red-600',      text: 'text-red-800',    sub: 'text-red-600' },
               };
               const labelMap = {
-                pending:   { title: `שלח הודעה לכל ה-${totalPending} שטרם ענו`, sub: 'תזכורת – בקש לאשר או לסרב', btnText: 'שלח תזכורת לכולם 🚀' },
+                pending:   { title: `שלח תזכורת לכל ה-${totalPendingResponse} שטרם ענו`, sub: 'תזכורת נוספת למי שכבר קיבל', btnText: 'שלח תזכורת 🚀' },
+                not_invited: { title: `שלח הזמנה לכל ה-${totalNotInvited} שטרם הוזמנו`, sub: 'שליחת הודעה ראשונה למוזמנים חדשים', btnText: 'שלח הזמנות לכולם 📧' },
                 attending: { title: `שלח הודעה לכל ה-${totalAttendingInvites} מגיעים`, sub: 'מידע על האירוע', btnText: 'שלח לכל המגיעים 🎉' },
                 declined:  { title: `שלח הודעה לכל ה-${totalDeclined} שלא מגיעים`, sub: 'הודעת תודה בכל זאת', btnText: 'שלח לכל שלא מגיעים' },
               };
-              const c = colorMap[filter as keyof typeof colorMap];
+              const c = colorMap[filter === 'not_invited' ? 'pending' : filter as keyof typeof colorMap];
               const l = labelMap[filter as keyof typeof labelMap];
               return (
                 <div className={`${c.bg} border ${c.border} p-4 rounded-2xl flex flex-col md:flex-row items-center gap-4 transition-all`}>
@@ -616,7 +638,7 @@ export default function AdminContent() {
                     </div>
                   </div>
                   <button
-                    onClick={() => handleTriggerRemoteBulkSend(filter as 'pending' | 'attending' | 'declined')}
+                    onClick={() => handleTriggerRemoteBulkSend(filter as 'pending' | 'attending' | 'declined' | 'not_invited')}
                     disabled={activeJobType === 'bulk_send'}
                     className={`mr-auto px-6 py-2 rounded-xl font-bold transition shadow-sm active:scale-95 flex items-center gap-2 ${
                       activeJobType === 'bulk_send'
@@ -662,6 +684,7 @@ export default function AdminContent() {
                   </th>
                   <th className="p-4 text-center">כמות</th>
                   <th className="p-4">סטטוס</th>
+                  <th className="p-4">נשלח בשעה</th>
                   <th className="p-4 text-center">אישור</th>
                   <th className="p-4">פעולות</th>
                 </tr>
@@ -684,7 +707,14 @@ export default function AdminContent() {
                       <td className="p-4">
                         {guest.status === 'attending' && <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-100 text-green-700 font-bold text-xs"><CheckCircle2 className="w-3 h-3"/> אישר</span>}
                         {guest.status === 'declined' && <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-100 text-red-700 font-bold text-xs"><XCircle className="w-3 h-3"/> סירב</span>}
-                        {guest.status === 'pending' && <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-700 font-bold text-xs"><HelpCircle className="w-3 h-3"/> טרם ענה</span>}
+                        {guest.status === 'pending' && (
+                          guest.last_reminder_at 
+                            ? <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-700 font-bold text-xs"><HelpCircle className="w-3 h-3"/> ממתין לתשובה</span>
+                            : <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-blue-700 font-bold text-xs"><Send className="w-3 h-3"/> טרם הוזמן</span>
+                        )}
+                      </td>
+                      <td className="p-4 text-slate-500 text-xs font-mono">
+                        {guest.last_reminder_at ? new Date(guest.last_reminder_at).toLocaleString('he-IL', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' }) : '-'}
                       </td>
                       <td className="p-4 text-center">
                         {!guest.is_approved ? (

@@ -89,27 +89,41 @@ client.on('disconnected', async (reason) => {
 // ─── Process a bulk_send job ───────────────────────────────────────────────────
 async function processBulkSend(job) {
   const targetStatus = job.payload?.targetStatus || 'pending';
-  await log(`🚀 פקודת שליחה התקבלה! יעד: ${targetStatus}`, 'success');
+  const labelMap = { 
+    pending: 'ממתינים לתשובה (נשלח)', 
+    not_invited: 'טרם הוזמנו',
+    attending: 'מגיעים', 
+    declined: 'לא מגיעים' 
+  };
+  
+  await log(`🚀 פקודת שליחה התקבלה! יעד: ${labelMap[targetStatus] || targetStatus}`, 'success');
 
   if (!isClientReady) {
     await log(`⚠️ WhatsApp עדיין לא מוכן. המשימה תמתין עד להתחברות.`, 'warning');
-    // We don't mark as failed, we just let it stay in pending or processing?
-    // Actually, let's wait a bit or throw error to let the fallback catch it.
     throw new Error('WhatsApp client not ready');
   }
 
   await supabaseAdmin.from('jobs').update({ status: 'processing' }).eq('id', job.id);
 
   try {
-    const { data: guests, error } = await supabaseAdmin
+    let query = supabaseAdmin
       .from('guests')
       .select('*')
-      .eq('status', targetStatus)
       .neq('status', 'deleted');
+
+    if (targetStatus === 'not_invited') {
+      query = query.eq('status', 'pending').is('last_reminder_at', null);
+    } else if (targetStatus === 'pending') {
+      query = query.eq('status', 'pending').not('last_reminder_at', 'is', null);
+    } else {
+      query = query.eq('status', targetStatus);
+    }
+
+    const { data: guests, error } = await query;
 
     if (error) throw error;
 
-    await log(`📦 נמצאו ${guests.length} אורחים לשליחה (${targetStatus}).`, 'info');
+    await log(`📦 נמצאו ${guests.length} אורחים לשליחה (${labelMap[targetStatus] || targetStatus}).`, 'info');
 
     let successCount = 0;
     let failCount = 0;
