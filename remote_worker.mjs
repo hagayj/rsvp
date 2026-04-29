@@ -57,6 +57,8 @@ async function updateHeartbeat(status = 'online') {
 // ─── WhatsApp Client ───────────────────────────────────────────────────────────
 const client = new Client({
   authStrategy: new LocalAuth(),
+  authTimeoutMs: 120000, // 2 minutes timeout for authentication
+  qrMaxRetries: 20,      // Allow more QR refreshes before failing
   puppeteer: {
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
   }
@@ -291,8 +293,8 @@ async function startClient() {
     await client.initialize();
   } catch (err) {
     console.error('❌ שגיאה באתחול:', err.message);
-    console.log('🔄 מנסה שוב בעוד 5 שניות...');
-    setTimeout(startClient, 5000);
+    console.log('🔄 מנסה שוב בעוד 30 שניות...');
+    setTimeout(startClient, 30000);
   }
 }
 
