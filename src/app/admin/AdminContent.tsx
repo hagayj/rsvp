@@ -195,7 +195,7 @@ export default function AdminContent() {
 
   const handleSendReminder = async (guest: Guest) => {
     const greeting = guest.greeting_name ? `היי ${guest.greeting_name}` : 'היי';
-    const message = `${greeting}, נשמח מאוד לראותכם בחגיגת יום ההולדת ה-80 של עמיר! אפשר לראות את ההזמנה ולאשר הגעה בקישור האישי כאן:\nhttps://rsvp-app-sage.vercel.app?id=${guest.unique_code}`;
+    const message = `${greeting}, נשמח מאוד לראותכם בחגיגת יום ההולדת ה-80 של עמיר! אפשר לראות את ההזמנה ולאשר הגעה בקישור האישי כאן:\nhttps://rsvp-app-sage.vercel.app?id=${guest.unique_code}\n\n*(אם הקישור אינו כחול, יש לשמור אותי כאיש קשר והוא ייפתח)*`;
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/${guest.phone.replace('+', '')}?text=${encodedMessage}`;
     
