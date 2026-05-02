@@ -132,11 +132,11 @@ async function processBulkSend(job) {
       const greeting = guest.greeting_name ? `היי ${guest.greeting_name}` : 'היי';
       let message;
       if (targetStatus === 'attending') {
-        message = `${greeting}, כיף שאתם מגיעים! רצינו להזכיר – האירוע מתקרב!\nמוזיאון הטרקטור, עין ורד\nלפרטים ולניווט: https://rsvp-app-sage.vercel.app?id=${guest.unique_code}\n\n*(אם הקישור אינו כחול, יש לשמור אותי כאיש קשר והוא ייפתח)*`;
+        message = `${greeting}, כיף שאתם מגיעים! רצינו להזכיר – האירוע מתקרב!\nמוזיאון הטרקטור, עין ורד\nלפרטים ולניווט: https://rsvp-app-sage.vercel.app?id=${guest.unique_code}\n\n*(אם הקישור לא נפתח, יש לשמור אותי כאיש קשר והוא ייפתח)*`;
       } else if (targetStatus === 'declined') {
-        message = `${greeting}, לא נוכל בלעדיכם! אם שינית דעתך ותרצה להגיע, הקישור שלך:\nhttps://rsvp-app-sage.vercel.app?id=${guest.unique_code}\n\n*(אם הקישור אינו כחול, יש לשמור אותי כאיש קשר והוא ייפתח)*`;
+        message = `${greeting}, לא נוכל בלעדיכם! אם שינית דעתך ותרצה להגיע, הקישור שלך:\nhttps://rsvp-app-sage.vercel.app?id=${guest.unique_code}\n\n*(אם הקישור לא נפתח, יש לשמור אותי כאיש קשר והוא ייפתח)*`;
       } else {
-        message = `${greeting}, נשמח מאוד לראותכם בחגיגת יום ההולדת ה-80 של עמיר! אפשר לראות את ההזמנה ולאשר הגעה בקישור האישי כאן:\nhttps://rsvp-app-sage.vercel.app?id=${guest.unique_code}\n\n*(אם הקישור אינו כחול, יש לשמור אותי כאיש קשר והוא ייפתח)*`;
+        message = `${greeting}, נשמח מאוד לראותכם בחגיגת יום ההולדת ה-80 של עמיר! אפשר לראות את ההזמנה ולאשר הגעה בקישור האישי כאן:\nhttps://rsvp-app-sage.vercel.app?id=${guest.unique_code}\n\n*(אם הקישור לא נפתח, יש לשמור אותי כאיש קשר והוא ייפתח)*`;
       }
 
       const phone = guest.phone.replace(/[^0-9]/g, '');
