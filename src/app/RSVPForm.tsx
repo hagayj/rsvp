@@ -14,7 +14,7 @@ interface RSVPFormProps {
 }
 
 export default function RSVPForm({ id, name, initialStatus, initialGuests }: RSVPFormProps) {
-  const [status, setStatus] = useState<STATUS>(initialStatus === 'pending' ? 'attending' : initialStatus);
+  const [status, setStatus] = useState<STATUS>(initialStatus);
   const [guests, setGuests] = useState<number>(initialGuests > 0 ? initialGuests : 1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(initialStatus !== 'pending');
@@ -206,10 +206,10 @@ export default function RSVPForm({ id, name, initialStatus, initialGuests }: RSV
 
               <button 
                 type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-green-600 to-lime-600 text-white font-bold text-lg rounded-2xl py-4 shadow-lg shadow-green-600/30 hover:shadow-green-600/50 transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-70 disabled:transform-none transition-all"
+                disabled={isSubmitting || status === 'pending'}
+                className="w-full bg-gradient-to-r from-green-600 to-lime-600 text-white font-bold text-lg rounded-2xl py-4 shadow-lg shadow-green-600/30 hover:shadow-green-600/50 transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none transition-all"
               >
-                {isSubmitting ? 'מעדכן את עמיר...' : 'אישור השתתפות'}
+                {isSubmitting ? 'מעדכן את עמיר...' : status === 'pending' ? 'נא לבחור אפשרות למעלה' : 'אישור השתתפות'}
               </button>
             </div>
           </form>

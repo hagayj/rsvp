@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { supabase } from '@/lib/supabase';
 import RSVPForm from './RSVPForm';
+import PhoneSearch from './PhoneSearch';
 
 // NextJS 15 requires awaiting searchParams
 export default async function Home(props: { searchParams: Promise<{ id?: string }> }) {
@@ -9,11 +10,8 @@ export default async function Home(props: { searchParams: Promise<{ id?: string 
 
   if (!id) {
     return (
-      <main className="min-h-screen bg-slate-50 flex items-center justify-center p-4 text-center" dir="rtl">
-        <div className="bg-white p-8 rounded-3xl shadow-xl border border-slate-100 max-w-sm w-full">
-          <h1 className="text-2xl font-bold text-slate-800 mb-2">אופס! 🧐</h1>
-          <p className="text-slate-500">הקישור חסר או לא תקין.<br/>נא להשתמש בקישור האישי שנשלח בוואטסאפ.</p>
-        </div>
+      <main className="min-h-screen bg-slate-50 flex items-center justify-center p-4" dir="rtl">
+        <PhoneSearch />
       </main>
     );
   }
@@ -27,11 +25,11 @@ export default async function Home(props: { searchParams: Promise<{ id?: string 
 
   if (error || !guest) {
     return (
-      <main className="min-h-screen bg-slate-50 flex items-center justify-center p-4 text-center" dir="rtl">
-        <div className="bg-white p-8 rounded-3xl shadow-xl border border-slate-100 max-w-sm w-full">
-          <h1 className="text-2xl font-bold text-slate-800 mb-2">לא נמצא 🚫</h1>
-          <p className="text-slate-500">לא הצלחנו לאתר את ההזמנה שלך במערכת. ייתכן שהקישור שגוי.</p>
+      <main className="min-h-screen bg-slate-50 flex items-center justify-center p-4 flex-col gap-6" dir="rtl">
+        <div className="bg-red-50 text-red-700 px-6 py-3 rounded-2xl border border-red-100 text-sm font-bold">
+          לא מצאנו הזמנה עם הקוד הזה. נסה לחפש לפי טלפון למטה:
         </div>
+        <PhoneSearch />
       </main>
     );
   }
