@@ -129,13 +129,14 @@ async function processBulkSend(job) {
     let failCount = 0;
 
     for (const guest of guests) {
+      const greeting = guest.greeting_name ? `היי ${guest.greeting_name}` : 'היי';
       let message;
       if (targetStatus === 'attending') {
-        message = `היי, כיף שאתם מגיעים! רצינו להזכיר – האירוע מתקרב!\nמוזיאון הטרקטור, עין ורד\nלפרטים ולניווט: https://rsvp-app-sage.vercel.app?id=${guest.unique_code}`;
+        message = `${greeting}, כיף שאתם מגיעים! רצינו להזכיר – האירוע מתקרב!\nמוזיאון הטרקטור, עין ורד\nלפרטים ולניווט: https://rsvp-app-sage.vercel.app?id=${guest.unique_code}`;
       } else if (targetStatus === 'declined') {
-        message = `היי, לא נוכל בלעדיכם! אם שינית דעתך ותרצה להגיע, הקישור שלך:\nhttps://rsvp-app-sage.vercel.app?id=${guest.unique_code}`;
+        message = `${greeting}, לא נוכל בלעדיכם! אם שינית דעתך ותרצה להגיע, הקישור שלך:\nhttps://rsvp-app-sage.vercel.app?id=${guest.unique_code}`;
       } else {
-        message = `היי, נשמח מאוד לראותכם בחגיגת יום ההולדת ה-80 של עמיר! אפשר לראות את ההזמנה ולאשר הגעה בקישור האישי כאן:\nhttps://rsvp-app-sage.vercel.app?id=${guest.unique_code}`;
+        message = `${greeting}, נשמח מאוד לראותכם בחגיגת יום ההולדת ה-80 של עמיר! אפשר לראות את ההזמנה ולאשר הגעה בקישור האישי כאן:\nhttps://rsvp-app-sage.vercel.app?id=${guest.unique_code}`;
       }
 
       const phone = guest.phone.replace(/[^0-9]/g, '');
@@ -164,8 +165,8 @@ async function processBulkSend(job) {
         }
       }
 
-      const delay = Math.floor(Math.random() * 5000) + 5000;
-      await log(`⏳ ממתין ${Math.round(delay / 1000)} שניות לפני ההודעה הבאה...`, 'info');
+      const delay = Math.floor(Math.random() * 30000) + 30000;
+      await log(`⏳ ממתין ${Math.round(delay / 1000)} שניות לפני ההודעה הבאה (ליתר ביטחון)...`, 'info');
       await new Promise(r => setTimeout(r, delay));
     }
 

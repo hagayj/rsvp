@@ -14,7 +14,7 @@ interface Guest {
   updated_at: string;
   last_reminder_at: string | null;
   added_by: string;
-  is_approved: boolean;
+  greeting_name?: string;
 }
 
 interface LogEntry {
@@ -45,6 +45,8 @@ export default function AdminContent() {
   const [isAutoScrollEnabled, setIsAutoScrollEnabled] = useState(true);
   const logsEndRef = useRef<HTMLDivElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingValue, setEditingValue] = useState('');
 
   const fetchGuests = useCallback(async () => {
     setLoading(true);
@@ -192,7 +194,8 @@ export default function AdminContent() {
   }, [isAuthenticated, fetchGuests, checkWorkerStatus, fetchLogs]);
 
   const handleSendReminder = async (guest: Guest) => {
-    const message = `היי, נשמח מאוד לראותכם בחגיגת יום ההולדת ה-80 של עמיר! אפשר לראות את ההזמנה ולאשר הגעה בקישור האישי כאן:\nhttps://rsvp-app-sage.vercel.app?id=${guest.unique_code}`;
+    const greeting = guest.greeting_name ? `היי ${guest.greeting_name}` : 'היי';
+    const message = `${greeting}, נשמח מאוד לראותכם בחגיגת יום ההולדת ה-80 של עמיר! אפשר לראות את ההזמנה ולאשר הגעה בקישור האישי כאן:\nhttps://rsvp-app-sage.vercel.app?id=${guest.unique_code}`;
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/${guest.phone.replace('+', '')}?text=${encodedMessage}`;
     
@@ -300,6 +303,24 @@ export default function AdminContent() {
       alert('שגיאה במחיקה: ' + error.message);
       setActiveJobType(null);
       setActiveJobStatus(null);
+    }
+  };
+
+  const handleUpdateGreetingName = async (id: string, newName: string) => {
+    try {
+      const { error } = await supabase
+        .from('guests')
+        .update({ greeting_name: newName })
+        .eq('id', id);
+
+      if (!error) {
+        setGuests(prev => prev.map(g => g.id === id ? { ...g, greeting_name: newName } : g));
+        setEditingId(null);
+      } else {
+        throw error;
+      }
+    } catch (err: any) {
+      alert('שגיאה בעדכון השם: ' + err.message);
     }
   };
 
@@ -659,6 +680,7 @@ export default function AdminContent() {
                       />
                     </div>
                   </th>
+                  <th className="p-4">שם לפנייה (היי ___)</th>
                   <th className="p-4">טלפון</th>
                   <th className="p-4">
                     <div className="flex flex-col gap-2">
@@ -680,14 +702,42 @@ export default function AdminContent() {
               </thead>
               <tbody className="divide-y divide-slate-50">
                 {loading ? (
-                  <tr><td colSpan={7} className="p-8 text-center text-slate-400">טוען נתונים...</td></tr>
+                  <tr><td colSpan={8} className="p-8 text-center text-slate-400">טוען נתונים...</td></tr>
                 ) : filteredGuests.length === 0 ? (
-                  <tr><td colSpan={7} className="p-8 text-center text-slate-400">אין אורחים שתואמים לסינון.</td></tr>
+                  <tr><td colSpan={8} className="p-8 text-center text-slate-400">אין אורחים שתואמים לסינון.</td></tr>
                 ) : (
                   filteredGuests.map(guest => (
                     <tr key={guest.id} className="hover:bg-slate-50/50 transition">
                       <td className="p-4">
                         <div className="font-bold text-slate-800">{guest.name}</div>
+                      </td>
+                      <td className="p-4">
+                        {editingId === guest.id ? (
+                          <div className="flex items-center gap-2">
+                            <input
+                              autoFocus
+                              type="text"
+                              className="w-full px-2 py-1 border border-purple-500 rounded-lg outline-none focus:ring-2 focus:ring-purple-200"
+                              value={editingValue}
+                              onChange={(e) => setEditingValue(e.target.value)}
+                              onBlur={() => handleUpdateGreetingName(guest.id, editingValue)}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') handleUpdateGreetingName(guest.id, editingValue);
+                                if (e.key === 'Escape') setEditingId(null);
+                              }}
+                            />
+                          </div>
+                        ) : (
+                          <div 
+                            onClick={() => {
+                              setEditingId(guest.id);
+                              setEditingValue(guest.greeting_name || '');
+                            }}
+                            className="text-purple-600 hover:bg-purple-50 px-2 py-1 rounded cursor-pointer transition italic font-medium"
+                          >
+                            {guest.greeting_name || 'לחץ לעדכון...'}
+                          </div>
+                        )}
                       </td>
                       <td className="p-4 text-slate-600 font-mono text-right" style={{direction: 'ltr'}}>{guest.phone}</td>
                       <td className="p-4 text-slate-500 text-sm">{guest.added_by || 'מערכת'}</td>
