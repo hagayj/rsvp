@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     description: "בואו לחגוג איתנו! יום ו', 5.6.2026 במוזיאון הטרקטור",
     images: [
       {
-        url: "/invitation_v2.jpg",
+        url: "https://rsvp-app-sage.vercel.app/invitation_v2.jpg",
         width: 1200,
         height: 630,
         alt: "הזמנה ליום הולדת 80",
