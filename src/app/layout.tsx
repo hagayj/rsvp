@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     description: "בואו לחגוג איתנו! יום ו', 5.6.2026 במוזיאון הטרקטור",
     images: [
       {
-        url: "/invetation.jpeg",
+        url: "/invitation.jpg",
         width: 1200,
         height: 630,
         alt: "הזמנה ליום הולדת 80",

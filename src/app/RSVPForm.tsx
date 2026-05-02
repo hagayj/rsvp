@@ -47,7 +47,7 @@ export default function RSVPForm({ id, name, initialStatus, initialGuests }: RSV
       {/* Invitation Image Header */}
       <div className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-xl shadow-green-900/10 border border-white/50 mb-8 overflow-hidden transform hover:scale-[1.01] transition-all duration-500">
         <img 
-          src="/invetation.jpeg" 
+          src="/invitation.jpg" 
           alt="הזמנה ליום הולדת 80" 
           className="w-full h-auto object-cover"
         />
