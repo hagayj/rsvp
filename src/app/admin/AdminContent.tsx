@@ -2,7 +2,7 @@
 "use client";
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
-import { Lock, CheckCircle2, XCircle, HelpCircle, Search, MessageSquareShare, Send, Terminal, Wifi, WifiOff, RefreshCw, Ban } from 'lucide-react';
+import { Lock, CheckCircle2, XCircle, HelpCircle, Search, MessageSquareShare, Send, Terminal, Wifi, WifiOff, RefreshCw, Ban, MessageSquare, Phone, Globe } from 'lucide-react';
 
 interface Guest {
   id: string;
@@ -43,6 +43,7 @@ export default function AdminContent() {
   const [nameSearch, setNameSearch] = useState('');
   const [addedBySearch, setAddedBySearch] = useState('');
   const [isAutoScrollEnabled, setIsAutoScrollEnabled] = useState(true);
+  const [sortDir, setSortDir] = useState<'desc' | 'asc'>('desc');
   const logsEndRef = useRef<HTMLDivElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -193,9 +194,13 @@ export default function AdminContent() {
     };
   }, [isAuthenticated, fetchGuests, checkWorkerStatus, fetchLogs]);
 
-  const handleSendReminder = async (guest: Guest) => {
+  const buildInviteMessage = (guest: Guest) => {
     const greeting = guest.greeting_name ? `היי ${guest.greeting_name}` : 'היי';
-    const message = `${greeting}, נשמח מאוד לראותכם בחגיגת יום ההולדת ה-80 של עמיר! אפשר לראות את ההזמנה ולאשר הגעה בקישור האישי כאן:\nhttps://rsvp-app-sage.vercel.app?id=${guest.unique_code}\n\n*(אם הקישור לא נפתח, יש לשמור אותי כאיש קשר והוא ייפתח)*`;
+    return `${greeting}, נשמח מאוד לראותכם בחגיגת יום ההולדת ה-80 של עמיר! אפשר לראות את ההזמנה ולאשר הגעה בקישור האישי כאן:\nhttps://rsvp-app-sage.vercel.app?id=${guest.unique_code}\n\n*(אם הקישור לא נפתח, יש לשמור אותי כאיש קשר והוא ייפתח)*`;
+  };
+
+  const handleSendReminder = async (guest: Guest) => {
+    const message = buildInviteMessage(guest);
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/${guest.phone.replace('+', '')}?text=${encodedMessage}`;
     
@@ -203,6 +208,19 @@ export default function AdminContent() {
     await supabase.from('guests').update({ last_reminder_at: now }).eq('id', guest.id);
     setGuests(prev => prev.map(g => g.id === guest.id ? { ...g, last_reminder_at: now } : g));
     window.open(whatsappUrl, '_blank');
+  };
+
+  const handleSendSms = async (guest: Guest) => {
+    const message = buildInviteMessage(guest);
+    // Format phone for SMS: need local format or international without +
+    // sms: URI — body param works on iOS & Android
+    const phone = guest.phone.startsWith('+') ? guest.phone : `+${guest.phone}`;
+    const smsUrl = `sms:${phone}?&body=${encodeURIComponent(message)}`;
+
+    const now = new Date().toISOString();
+    await supabase.from('guests').update({ last_reminder_at: now }).eq('id', guest.id);
+    setGuests(prev => prev.map(g => g.id === guest.id ? { ...g, last_reminder_at: now } : g));
+    window.location.href = smsUrl;
   };
 
   const handleTriggerRemoteBulkSend = async (targetStatus: 'pending' | 'attending' | 'declined' | 'not_invited') => {
@@ -393,6 +411,11 @@ export default function AdminContent() {
       const nameMatch = (g.name || '').toLowerCase().includes(nameSearch.toLowerCase());
       const addedByMatch = (g.added_by || 'מערכת').toLowerCase().includes(addedBySearch.toLowerCase());
       return nameMatch && addedByMatch;
+    })
+    .sort((a, b) => {
+      const ta = a.last_reminder_at ? new Date(a.last_reminder_at).getTime() : 0;
+      const tb = b.last_reminder_at ? new Date(b.last_reminder_at).getTime() : 0;
+      return sortDir === 'desc' ? tb - ta : ta - tb;
     });
 
   const getLogColor = (level: string) => {
@@ -696,7 +719,16 @@ export default function AdminContent() {
                   </th>
                   <th className="p-4 text-center">כמות</th>
                   <th className="p-4">סטטוס</th>
-                  <th className="p-4">נשלח בשעה</th>
+                  <th className="p-4">
+                    <button
+                      onClick={() => setSortDir(d => d === 'desc' ? 'asc' : 'desc')}
+                      className="flex items-center gap-1 font-bold hover:text-purple-600 transition select-none"
+                      title="מיין לפי זמן שליחה"
+                    >
+                      נשלח בשעה
+                      <span className="text-base leading-none">{sortDir === 'desc' ? '↓' : '↑'}</span>
+                    </button>
+                  </th>
                   <th className="p-4">פעולות</th>
                 </tr>
               </thead>
@@ -756,7 +788,36 @@ export default function AdminContent() {
                       </td>
                       <td className="p-4">
                         <div className="flex items-center gap-2">
-                          <button onClick={() => handleSendReminder(guest)} className="p-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition shadow-sm"><Send className="w-4 h-4" /></button>
+                          <button
+                            onClick={() => handleSendReminder(guest)}
+                            title="שלח בוואטסאפ"
+                            className="p-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition shadow-sm"
+                          >
+                            <Send className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => handleSendSms(guest)}
+                            title="שלח SMS"
+                            className="p-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition shadow-sm"
+                          >
+                            <MessageSquare className="w-4 h-4" />
+                          </button>
+                          <a
+                            href={`tel:${guest.phone.startsWith('+') ? guest.phone : '+' + guest.phone}`}
+                            title="התקשר"
+                            className="p-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg transition shadow-sm flex items-center"
+                          >
+                            <Phone className="w-4 h-4" />
+                          </a>
+                          <a
+                            href={`/?id=${guest.unique_code}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title="ערוך אישור הגעה"
+                            className="p-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg transition shadow-sm flex items-center"
+                          >
+                            <Globe className="w-4 h-4" />
+                          </a>
                           <button onClick={() => handleDeleteGuest(guest.id, guest.name)} className="p-2 bg-red-100 hover:bg-red-200 text-red-600 rounded-lg transition shadow-sm"><XCircle className="w-4 h-4" /></button>
                         </div>
                       </td>
