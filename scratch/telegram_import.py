@@ -110,18 +110,26 @@ async def main():
                         'added_by': added_by
                     })
 
-        if INSERT_TO_DB and results:
-            log_to_db(f"📥 מוסיף {len(results)} אורחים חדשים למערכת...", "info")
-            count = 0
-            for guest in results:
-                try:
-                    sb.table('guests').insert(guest).execute()
-                    count += 1
-                except Exception as e:
-                    print(f"Skipping duplicate/error: {e}")
-            log_to_db(f"✅ סנכרון הושלם: {count} אורחים חדשים נוספו.", "success")
+        if results:
+            log_to_db(f"🔍 מצאתי {len(results)} אורחים חדשים בטלגרם שלא קיימים ב-DB.", "info")
+            for r in results[:10]: # Show first 10
+                print(f"  - {r['name']} ({r['phone']}) נוסף ע\"י {r['added_by']}")
+            if len(results) > 10:
+                print(f"  ... ועוד {len(results)-10} נוספים.")
+                
+            if INSERT_TO_DB:
+                log_to_db(f"📥 מוסיף אותם למערכת...", "info")
+                count = 0
+                for guest in results:
+                    try:
+                        sb.table('guests').insert(guest).execute()
+                        count += 1
+                    except Exception as e:
+                        print(f"Skipping duplicate/error: {e}")
+                log_to_db(f"✅ סנכרון הושלם: {count} אורחים חדשים נוספו.", "success")
         else:
             log_to_db("🏁 סריקה הסתיימה. לא נמצאו אורחים חדשים להוספה.", "info")
+
 
 if __name__ == '__main__':
     asyncio.run(main())
