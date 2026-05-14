@@ -373,6 +373,51 @@ export default function AdminContent() {
     if (phone.startsWith('0')) phone = '+972' + phone.slice(1);
     else if (!phone.startsWith('+')) phone = '+' + phone;
 
+    // בדיקה האם מספר הטלפון כבר קיים במערכת
+    const { data: existing } = await supabase
+      .from('guests')
+      .select('*')
+      .eq('phone', phone)
+      .maybeSingle();
+
+    if (existing) {
+      if (existing.status === 'deleted') {
+        if (confirm(`איש קשר עם מספר זה היה קיים בעבר ונמחק (${existing.name}).\nהאם ברצונך לשחזר אותו ולעדכן את שמו ל-"${manualName}"?`)) {
+          const { error: updateError } = await supabase
+            .from('guests')
+            .update({
+              name: manualName,
+              status: 'pending',
+              added_by: 'מנהל (ידני)',
+              updated_at: new Date().toISOString()
+            })
+            .eq('id', existing.id);
+
+          if (!updateError) {
+            setManualName('');
+            setManualPhone('');
+            setShowManualAdd(false);
+            fetchGuests();
+            return;
+          } else {
+            alert('שגיאה בשחזור האורח: ' + updateError.message);
+            return;
+          }
+        } else {
+          return;
+        }
+      } else {
+        const statusMap: Record<string, string> = {
+          pending: 'ממתין לתשובה / טרם הוזמן',
+          attending: 'מגיע',
+          declined: 'לא מגיע'
+        };
+        const statusHeb = statusMap[existing.status] || existing.status;
+        alert(`שים לב: מספר הטלפון ${manualPhone} כבר קיים במערכת!\n\nשם רשום: ${existing.name}\nסטטוס נוכחי: ${statusHeb}`);
+        return;
+      }
+    }
+
     const unique_code = Math.random().toString(36).substring(2, 10);
 
     const { error } = await supabase.from('guests').insert([{
