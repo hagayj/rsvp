@@ -224,7 +224,8 @@ export default function AdminContent() {
   };
 
   const handleSendSecondReminder = async (guest: Guest) => {
-    const reminderMessage = `נתראה ביום ו' הקרוב 5.6.2026, במוזיאון הטרקטור שבעין ורד
+    const reminderMessage = `*עמיר זיבליק חוגג גבורות!*
+נתראה ביום ו' הקרוב 5.6.2026, במוזיאון הטרקטור שבעין ורד
 התכנסות החל מהשעה 20:00
 תחילת שירה בשעה 21:00
 
