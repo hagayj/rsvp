@@ -229,9 +229,9 @@ export default function AdminContent() {
 התכנסות החל מהשעה 20:00
 תחילת שירה בשעה 21:00
 
-מבקשים שלא להביא מתנות, ובמקום לתרום באהבה גדולה למוזיאון ❤️
+מבקשים שלא להביא מתנות, ובמקום לתרום באהבה גדולה למוזיאום ❤️
 
-לעדכון פרטי הגעה - לחץ לקישור: https://rsvp-app-sage.vercel.app?id=${guest.unique_code}`;
+לחץ על התמונה/ קישור כדי לשנות פרטי הגעה: https://rsvp-app-sage.vercel.app?id=${guest.unique_code}`;
 
     const phone = guest.phone.startsWith('+') ? guest.phone : `+${guest.phone}`;
     const smsUrl = `sms:${phone}?&body=${encodeURIComponent(reminderMessage)}`;
