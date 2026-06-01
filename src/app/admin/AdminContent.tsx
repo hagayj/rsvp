@@ -2,7 +2,7 @@
 "use client";
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
-import { Lock, CheckCircle2, XCircle, HelpCircle, Search, MessageSquareShare, Send, Terminal, Wifi, WifiOff, RefreshCw, Ban, MessageSquare, Phone, Globe } from 'lucide-react';
+import { Lock, CheckCircle2, XCircle, HelpCircle, Search, MessageSquareShare, Send, Terminal, Wifi, WifiOff, RefreshCw, Ban, MessageSquare, Phone, Globe, Clock } from 'lucide-react';
 
 interface Guest {
   id: string;
@@ -220,6 +220,21 @@ export default function AdminContent() {
     const now = new Date().toISOString();
     await supabase.from('guests').update({ last_reminder_at: now }).eq('id', guest.id);
     setGuests(prev => prev.map(g => g.id === guest.id ? { ...g, last_reminder_at: now } : g));
+    window.location.href = smsUrl;
+  };
+
+  const handleSendSecondReminder = async (guest: Guest) => {
+    const reminderMessage = `*עמיר חוגג גבורות!*
+נתראה ביום ו' *הקרוב* 5.6.2026, במוזיאון הטרקטור שבעין ורד
+התכנסות החל מהשעה 20:00
+תחילת שירה בשעה 21:00
+
+מבקשים שלא להביא מתנות, ובמקום לתרום באהבה גדולה למוזיאון ❤️
+
+לעדכון פרטי הגעה - לחץ לקישור: https://rsvp-app-sage.vercel.app?id=${guest.unique_code}`;
+
+    const phone = guest.phone.startsWith('+') ? guest.phone : `+${guest.phone}`;
+    const smsUrl = `sms:${phone}?&body=${encodeURIComponent(reminderMessage)}`;
     window.location.href = smsUrl;
   };
 
@@ -840,6 +855,15 @@ export default function AdminContent() {
                           >
                             <Send className="w-4 h-4" />
                           </button>
+                          {guest.status === 'attending' && (
+                            <button
+                              onClick={() => handleSendSecondReminder(guest)}
+                              title="שלח תזכורת SMS"
+                              className="p-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition shadow-sm"
+                            >
+                              <Clock className="w-4 h-4" />
+                            </button>
+                          )}
                           <button
                             onClick={() => handleSendSms(guest)}
                             title="שלח SMS"
