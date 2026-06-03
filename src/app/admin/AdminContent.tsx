@@ -13,6 +13,7 @@ interface Guest {
   unique_code: string;
   updated_at: string;
   last_reminder_at: string | null;
+  last_sms_reminder_at?: string | null;
   added_by: string;
   greeting_name?: string;
 }
@@ -237,14 +238,14 @@ export default function AdminContent() {
   };
 
   const handleBulkSendSecondReminder = async () => {
-    const attendingGuests = guests.filter(g => g.status === 'attending');
+    const attendingGuests = guests.filter(g => g.status === 'attending' && !g.last_sms_reminder_at);
 
     if (attendingGuests.length === 0) {
-      alert('אין אורחים שמגיעים');
+      alert('כל המגיעים כבר קיבלו תזכורת!');
       return;
     }
 
-    if (!confirm(`אתה בטוח? זה יפתח חלונות SMS ל-${attendingGuests.length} אורחים`)) return;
+    if (!confirm(`אתה בטוח? זה יפתח חלונות SMS ל-${attendingGuests.length} אורחים שעדיין לא קיבלו תזכורת`)) return;
 
     const now = new Date().toISOString();
     const reminderMessage = `*עמיר זיבליק חוגג גבורות!*
@@ -827,6 +828,7 @@ export default function AdminContent() {
                   </th>
                   <th className="p-4 text-center">כמות</th>
                   <th className="p-4">סטטוס</th>
+                  <th className="p-4">תזכורת</th>
                   <th className="p-4">
                     <button
                       onClick={() => setSortDir(d => d === 'desc' ? 'asc' : 'desc')}
@@ -886,10 +888,16 @@ export default function AdminContent() {
                         {guest.status === 'attending' && <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-100 text-green-700 font-bold text-xs"><CheckCircle2 className="w-3 h-3"/> אישר</span>}
                         {guest.status === 'declined' && <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-100 text-red-700 font-bold text-xs"><XCircle className="w-3 h-3"/> סירב</span>}
                         {guest.status === 'pending' && (
-                          guest.last_reminder_at 
+                          guest.last_reminder_at
                             ? <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-700 font-bold text-xs"><HelpCircle className="w-3 h-3"/> ממתין לתשובה</span>
                             : <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-blue-700 font-bold text-xs"><Send className="w-3 h-3"/> טרם הוזמן</span>
                         )}
+                      </td>
+                      <td className="p-4">
+                        {guest.last_sms_reminder_at
+                          ? <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-100 text-purple-700 font-bold text-xs"><Clock className="w-3 h-3"/> קיבל תזכורת</span>
+                          : <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-600 font-bold text-xs">ללא תזכורת</span>
+                        }
                       </td>
                       <td className="p-4 text-slate-500 text-xs font-mono">
                         {guest.last_reminder_at ? new Date(guest.last_reminder_at).toLocaleString('he-IL', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' }) : '-'}
