@@ -238,10 +238,10 @@ export default function AdminContent() {
   };
 
   const handleBulkSendSecondReminder = async () => {
-    const attendingGuests = guests.filter(g => g.status === 'attending' && !g.last_sms_reminder_at);
+    const attendingGuests = guests.filter(g => (g.status === 'attending' || g.status === 'pending') && !g.last_sms_reminder_at);
 
     if (attendingGuests.length === 0) {
-      alert('כל המגיעים כבר קיבלו תזכורת!');
+      alert('כל האורחים כבר קיבלו תזכורת!');
       return;
     }
 
@@ -912,7 +912,7 @@ export default function AdminContent() {
                           >
                             <Send className="w-4 h-4" />
                           </button>
-                          {guest.status === 'attending' && (
+                          {(guest.status === 'attending' || guest.status === 'pending') && (
                             <button
                               onClick={() => handleSendSecondReminder(guest)}
                               title="שלח תזכורת SMS (בחר SMS ולא iMessage בטלפון)"
