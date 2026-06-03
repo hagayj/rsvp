@@ -588,6 +588,7 @@ export default function AdminContent() {
 
               <button
                 onClick={handleBulkSendSecondReminder}
+                title="בחר SMS ולא iMessage בטלפון"
                 className="flex items-center gap-2 px-4 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-2xl font-bold transition shadow-md active:scale-95"
               >
                 <Clock className="w-5 h-5" />
@@ -914,7 +915,7 @@ export default function AdminContent() {
                           {guest.status === 'attending' && (
                             <button
                               onClick={() => handleSendSecondReminder(guest)}
-                              title="שלח תזכורת SMS"
+                              title="שלח תזכורת SMS (בחר SMS ולא iMessage בטלפון)"
                               className="p-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition shadow-sm"
                             >
                               <Clock className="w-4 h-4" />
