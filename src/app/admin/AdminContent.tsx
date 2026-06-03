@@ -236,6 +236,48 @@ export default function AdminContent() {
     window.location.href = smsUrl;
   };
 
+  const handleBulkSendSecondReminder = async () => {
+    const attendingGuests = guests.filter(g => g.status === 'attending');
+
+    if (attendingGuests.length === 0) {
+      alert('אין אורחים שמגיעים');
+      return;
+    }
+
+    if (!confirm(`אתה בטוח? זה יפתח חלונות SMS ל-${attendingGuests.length} אורחים`)) return;
+
+    const now = new Date().toISOString();
+    const reminderMessage = `*עמיר זיבליק חוגג גבורות!*
+נתראה ביום ו' הקרוב 5.6.2026, במוזיאון הטרקטור שבעין ורד
+התכנסות החל מהשעה 20:00
+תחילת שירה בשעה 21:00
+
+מבקשים שלא להביא מתנות, ובמקום לתרום באהבה גדולה למוזיאון ❤️`;
+
+    for (let i = 0; i < attendingGuests.length; i++) {
+      const guest = attendingGuests[i];
+
+      const phone = guest.phone.startsWith('+') ? guest.phone : `+${guest.phone}`;
+      const smsUrl = `sms:${phone}?&body=${encodeURIComponent(reminderMessage)}`;
+
+      await supabase.from('guests').update({ last_sms_reminder_at: now }).eq('id', guest.id);
+
+      window.open(smsUrl, '_blank');
+
+      if (i < attendingGuests.length - 1) {
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
+    }
+
+    setGuests(prev => prev.map(g =>
+      attendingGuests.find(ag => ag.id === g.id)
+        ? { ...g, last_sms_reminder_at: now }
+        : g
+    ));
+
+    alert('כל החלונות פתוחו! כל שנותר הוא לאשר בטלפון');
+  };
+
   const handleTriggerRemoteBulkSend = async (targetStatus: 'pending' | 'attending' | 'declined' | 'not_invited') => {
     const count = targetStatus === 'not_invited' 
       ? guests.filter(g => g.status === 'pending' && !g.last_reminder_at).length
@@ -535,12 +577,20 @@ export default function AdminContent() {
                 סנכרן מטלגרם
               </button>
 
-              <button 
+              <button
                 onClick={() => setShowManualAdd(true)}
                 className="flex items-center gap-2 px-4 py-3 bg-green-600 hover:bg-green-700 text-white rounded-2xl font-bold transition shadow-md active:scale-95"
               >
                 <CheckCircle2 className="w-5 h-5" />
                 הוספה ידנית
+              </button>
+
+              <button
+                onClick={handleBulkSendSecondReminder}
+                className="flex items-center gap-2 px-4 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-2xl font-bold transition shadow-md active:scale-95"
+              >
+                <Clock className="w-5 h-5" />
+                שלח SMS תזכורת
               </button>
             </div>
           </div>
